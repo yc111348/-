@@ -25,23 +25,23 @@ bool SingleConnectChooseScene::init()
     
     //背景图片
     Size size = Director::getInstance()->getVisibleSize();
-    Sprite  *background = Sprite::create("background.png");
+    Sprite  *background = Sprite::create("UIres/background.png");
     background->setPosition(size.width*4/7,size.height/2);
     addChild(background,0);
     
     //返回上一层按钮
-    auto * ReturnItem = MenuItemImage::create("returnL.png","returnL2.png",this,menu_selector(SingleConnectChooseScene::menuGoToChooseScene));
+    auto * ReturnItem = MenuItemImage::create("UIres/returnL.png","UIres/returnL2.png",this,menu_selector(SingleConnectChooseScene::menuGoToChooseScene));
     ReturnItem->setPosition(size.width/7,size.height*8/9+10);
     auto * MenuToChoose = Menu::create(ReturnItem, NULL);
     MenuToChoose->setPosition(Point::ZERO);
     this->addChild(MenuToChoose,1);
     
     //GUI添加
-    auto *choosebg1 = Sprite::create("ChooseGUI.png");
+    auto *choosebg1 = Sprite::create("UIres/ChooseGUI.png");
     choosebg1 -> setPosition(size.width*2/7, size.height/2);
     addChild(choosebg1,1);
     
-    auto *choosebg2 = Sprite::create("ChooseGUI.png");
+    auto *choosebg2 = Sprite::create("UIres/ChooseGUI.png");
     choosebg2 -> setPosition(size.width*6/7, size.height/2);
     addChild(choosebg2,1);
     
@@ -51,7 +51,7 @@ bool SingleConnectChooseScene::init()
     addChild(WRM,1);
     
     //单机模式
-    auto single = cocos2d::ui::Button::create("single.png");
+    auto single = cocos2d::ui::Button::create("UIres/single.png");
     single -> setScale(0.5);
     single -> cocos2d::Node::setPosition(size.width*2/7, size.height/2);
     addChild(single,2);
@@ -60,7 +60,7 @@ bool SingleConnectChooseScene::init()
     addChild(singlettf,2);
     
     //联机模式
-    auto connect = cocos2d::ui::Button::create("connect.png");
+    auto connect = cocos2d::ui::Button::create("UIres/connect.png");
     connect -> setScale(0.4);
     connect -> cocos2d::Node::setPosition(size.width*6/7, size.height/2);
     addChild(connect,2);

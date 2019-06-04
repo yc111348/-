@@ -25,19 +25,19 @@ bool WeaponScene::init()
 {
     //背景图片
     Size size = Director::getInstance()->getVisibleSize();
-    Sprite  *background = Sprite::create("background.png");
+    Sprite  *background = Sprite::create("UIres/background.png");
     background->setPosition(size.width*4/7,size.height/2);
     addChild(background,0);
     
     
     //返回上一层按钮
-    auto * ReturnItem = MenuItemImage::create("returnL.png","returnL2.png",this,menu_selector(WeaponScene::menuGoToChooseScene));
+    auto * ReturnItem = MenuItemImage::create("UIres/returnL.png","UIres/returnL2.png",this,menu_selector(WeaponScene::menuGoToChooseScene));
     ReturnItem->setPosition(size.width/7,size.height*8/9+10);
     auto * MenuToChoose = Menu::create(ReturnItem, NULL);
     MenuToChoose->setPosition(Point::ZERO);
     this->addChild(MenuToChoose,1);
     //按钮"我选好了！"
-    auto * OkItem = MenuItemImage::create("yes.png","no.png",this,menu_selector(WeaponScene::menuGoToChooseScene));
+    auto * OkItem = MenuItemImage::create("UIres/yes.png","UIres/no.png",this,menu_selector(WeaponScene::menuGoToChooseScene));
     OkItem->setPosition(size.width*4/7, size.height*1/7);
     auto * MenuOkToChoose = Menu::create(OkItem, NULL);
     MenuOkToChoose->setPosition(Point::ZERO);
@@ -55,14 +55,14 @@ bool WeaponScene::init()
     addChild(hint,1);
     
     //武器选择
-    auto * BaseMap1 = Sprite::create("W_C_BG.png");
-    auto * BaseMap2 = Sprite::create("W_C_BG.png");
+    auto * BaseMap1 = Sprite::create("UIres/W_C_BG.png");
+    auto * BaseMap2 = Sprite::create("UIres/W_C_BG.png");
     BaseMap1 -> setPosition(size.width*2/7, size.height/2);
     BaseMap2 -> setPosition(size.width*6/7, size.height/2);
     addChild(BaseMap1,1);
     addChild(BaseMap2,1);
-    auto HeavenFire = Sprite::create("HeavenFire.png");
-    auto fifth = Sprite::create("5th.png");
+    auto HeavenFire = Sprite::create("UIres/HeavenFire.png");
+    auto fifth = Sprite::create("UIres/5th.png");
     HeavenFire -> setPosition(BaseMap1->getContentSize()/2);
     fifth -> setPosition(BaseMap2->getContentSize()/2);
     BaseMap1 -> addChild(HeavenFire);

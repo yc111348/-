@@ -68,13 +68,13 @@ bool ChooseScene::init()
 {
     //背景图片
     Size size = Director::getInstance()->getVisibleSize();
-    Sprite  *background = Sprite::create("background.png");
+    Sprite  *background = Sprite::create("UIres/background.png");
     background->setPosition(size.width*4/7,size.height/2);
     addChild(background,0);
 
 
     //退出按钮
-    _pauseButton = ui::Button::create("close1.png");
+    _pauseButton = ui::Button::create("UIres/close1.png");
     _pauseButton -> cocos2d::Node::setPosition(size.width+8,15);
     addChild(_pauseButton,1);
     
@@ -94,11 +94,11 @@ bool ChooseScene::init()
     
     
     //GUI添加
-    auto *choosebg1 = Sprite::create("ChooseGUI.png");
+    auto *choosebg1 = Sprite::create("UIres/ChooseGUI.png");
     choosebg1 -> setPosition(size.width*2/7, size.height/2);
     addChild(choosebg1,1);
     
-    auto *choosebg2 = Sprite::create("ChooseGUI.png");
+    auto *choosebg2 = Sprite::create("UIres/ChooseGUI.png");
     choosebg2 -> setPosition(size.width*6/7, size.height/2);
     addChild(choosebg2,1);
     
@@ -115,7 +115,7 @@ bool ChooseScene::init()
 
     
     //跳转选择武器界面
-    auto * WeaponItem = MenuItemImage::create("weapon.png","weapon2.png",this,menu_selector(ChooseScene::menuGoToWeapon));
+    auto * WeaponItem = MenuItemImage::create("UIres/weapon.png","UIres/weapon2.png",this,menu_selector(ChooseScene::menuGoToWeapon));
     WeaponItem->setPosition(size.width*6/7,size.height/2-20);
     auto * MenuToWeapon = Menu::create(WeaponItem, NULL);
     MenuToWeapon->setPosition(Point::ZERO);
@@ -130,7 +130,7 @@ bool ChooseScene::init()
 
     
     //跳转选择人物界面
-    auto * CharacterItem = MenuItemImage::create("character.png","character2.png",this,menu_selector(ChooseScene::menuGoToCharacter));
+    auto * CharacterItem = MenuItemImage::create("UIres/character.png","UIres/character2.png",this,menu_selector(ChooseScene::menuGoToCharacter));
     CharacterItem->setPosition(size.width*2/7,size.height/2-20);
     auto * MenuToCharacter = Menu::create(CharacterItem, NULL);
     MenuToCharacter->setPosition(Point::ZERO);
@@ -146,7 +146,7 @@ bool ChooseScene::init()
 //    auto nextItem = Menu::create(nextbg,NULL);
 //    nextItem -> setPosition(Point::ZERO);
 //    addChild(nextItem,2);
-    auto nextItem = Button::create("okbuttom.png");
+    auto nextItem = Button::create("UIres/okbuttom.png");
     nextItem -> cocos2d::Node::setPosition(size.width*4/7, size.height*1/9);
     addChild(nextItem,2);
     

@@ -36,7 +36,7 @@ void HelloWorld::initUI()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     //退出（加确认）
-    _pauseButton = ui::Button::create("close1.png");
+    _pauseButton = ui::Button::create("UIres/close1.png");
     _pauseButton -> cocos2d::Node::setPosition(visibleSize.width+8,15);
     addChild(_pauseButton,1);
 
@@ -46,7 +46,7 @@ void HelloWorld::initUI()
                                               auto popupbox = PopupBox::create();
 
                                               popupbox -> registerCallback([this,popupbox](){
-                                                  CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav",false);
+                                                  CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("MUSICres/click.wav",false);
                                                   popupbox -> removeFromParent();
                                                   this ->scheduleUpdate();
                                                   
@@ -58,10 +58,10 @@ void HelloWorld::initUI()
     
     
     //主界面图片
-    auto sprite = Sprite::create("HelloWorld.png");
+    auto sprite = Sprite::create("UIres/HelloWorld.png");
     if (sprite == nullptr)
     {
-        problemLoading("'HelloWorld.png'");
+        problemLoading("'UIres/HelloWorld.png'");
     }
     else
     {
@@ -71,7 +71,7 @@ void HelloWorld::initUI()
     
     
     //背景音乐
-    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.wav",true);
+    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("MUSICres/bgm.wav",true);
     
     
     

@@ -30,9 +30,9 @@ bool PopupBox::init()
     auto size = Director::getInstance()->getVisibleSize();
     
     auto background = LayerColor::create(Color4B(0,0,0,200));
-    auto box = ui::Scale9Sprite::create("popupBG.png");
-    auto continueButtom = ui::Button::create("yes.png");
-    auto endGameButtom = ui::Button::create("no.png");
+    auto box = ui::Scale9Sprite::create("UIres/popupBG.png");
+    auto continueButtom = ui::Button::create("UIres/yes.png");
+    auto endGameButtom = ui::Button::create("UIres/no.png");
     auto title = Label::createWithTTF("你确认退出游戏吗？", "fonts/chicken.ttf", 24);
     auto yesttf = Label::createWithTTF("继续游戏", "fonts/chicken.ttf", 16);
     auto nottf = Label::createWithTTF("确认退出", "fonts/chicken.ttf", 16);

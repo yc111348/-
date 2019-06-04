@@ -61,12 +61,12 @@ bool LoginScene::init()
 {
     //背景图片
     Size size = Director::getInstance()->getVisibleSize();
-    Sprite  *background = Sprite::create("background.png");
+    Sprite  *background = Sprite::create("UIres/background.png");
     background->setPosition(size.width*4/7,size.height/2);
     addChild(background,0);
     
     //输入框
-    auto inputbox = Sprite::create("LoginGUI.png");
+    auto inputbox = Sprite::create("UIres/LoginGUI.png");
     inputbox->setPosition(size.width*4/7,size.height/2);
     addChild(inputbox,1);
     
@@ -94,7 +94,7 @@ bool LoginScene::init()
     
    // OK按钮
     
-    auto * OkButtom = MenuItemImage::create("okbuttom.png","okbuttom1.png",this,menu_selector(LoginScene::menuGoToHelloworld));
+    auto * OkButtom = MenuItemImage::create("UIres/okbuttom.png","UIres/okbuttom1.png",this,menu_selector(LoginScene::menuGoToHelloworld));
     OkButtom->setPosition(ccp(245,90));
     auto * MenuToOk = Menu::create(OkButtom, NULL);
     MenuToOk->setPosition(Point::ZERO);
@@ -132,7 +132,7 @@ bool LoginScene::init()
     
     //音乐暂停/播放
     //Pause
-    auto MusicItemOff = createMenuItem2Img("MusicOff1.png","MusicOff1.png");
+    auto MusicItemOff = createMenuItem2Img("UIres/MusicOff1.png","UIres/MusicOff1.png");
     MusicItemOff -> setPosition(size.width*1/5, size.height*11/12);
     auto menuMusicOff = Menu::create(MusicItemOff,NULL);
     menuMusicOff -> setPosition(Point::ZERO);
@@ -149,7 +149,7 @@ bool LoginScene::init()
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listennerMusicItemOff, MusicItemOff);
 
     //Resume
-    auto MusicItemOn = createMenuItem2Img("MusicOn1.png","MusicOn1.png");
+    auto MusicItemOn = createMenuItem2Img("UIres/MusicOn1.png","UIres/MusicOn1.png");
     MusicItemOn -> setPosition(size.width*19/20, size.height*11/12);
     auto menuMusicOn = Menu::create(MusicItemOn,NULL);
     menuMusicOn -> setPosition(Point::ZERO);
@@ -159,7 +159,7 @@ bool LoginScene::init()
     {
         if(MusicItemOn->getBoundingBox().containsPoint(touch->getLocation()))
         {
-            CocosDenshion::SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
+            CocosDenshion::SimpleAudioEngine::getInstance()->resumeBackgroundMusic();
         }
         return false;
     };
@@ -167,7 +167,7 @@ bool LoginScene::init()
     
     
     //退出
-    _pauseButton = ui::Button::create("close1.png");
+    _pauseButton = ui::Button::create("UIres/close1.png");
     _pauseButton -> cocos2d::Node::setPosition(size.width+8,15);
     addChild(_pauseButton,1);
     
