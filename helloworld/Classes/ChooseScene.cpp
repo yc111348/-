@@ -69,13 +69,13 @@ bool ChooseScene::init()
     //背景图片
     Size size = Director::getInstance()->getVisibleSize();
     Sprite  *background = Sprite::create("UIres/background.png");
-    background->setPosition(size.width*4/7,size.height/2);
+    background->setPosition(size.width/2,size.height/2);
     addChild(background,0);
 
 
     //退出按钮
     _pauseButton = ui::Button::create("UIres/close1.png");
-    _pauseButton -> cocos2d::Node::setPosition(size.width+8,15);
+    _pauseButton -> cocos2d::Node::setPosition(size.width-40,40);
     addChild(_pauseButton,1);
     
     _pauseButton -> addClickEventListener([this](Ref* ref)
@@ -95,28 +95,28 @@ bool ChooseScene::init()
     
     //GUI添加
     auto *choosebg1 = Sprite::create("UIres/ChooseGUI.png");
-    choosebg1 -> setPosition(size.width*2/7, size.height/2);
+    choosebg1 -> setPosition(size.width*1/4, size.height/2);
     addChild(choosebg1,1);
     
     auto *choosebg2 = Sprite::create("UIres/ChooseGUI.png");
-    choosebg2 -> setPosition(size.width*6/7, size.height/2);
+    choosebg2 -> setPosition(size.width*3/4, size.height/2);
     addChild(choosebg2,1);
     
-    auto *WRM = Label::createWithTTF("战斗准备！","fonts/chicken.ttf", 24);
-    WRM -> setPosition(size.width*4/7, size.height*6/7);
+    auto *WRM = Label::createWithTTF("战斗准备！","fonts/chicken.ttf", 50);
+    WRM -> setPosition(size.width/2, size.height*6/7);
     WRM -> setColor(Color3B(54,54,54));
     addChild(WRM,1);
     
     
     //武器界面准备
-    auto *weaponttf = Label::createWithTTF("选择武器","fonts/chicken.ttf", 16);
-    weaponttf -> setPosition(size.width*6/7, size.height*5/7);
+    auto *weaponttf = Label::createWithTTF("选择武器","fonts/chicken.ttf", 35);
+    weaponttf -> setPosition(size.width*3/4, size.height*5/7-20);
     addChild(weaponttf,2);
 
     
     //跳转选择武器界面
     auto * WeaponItem = MenuItemImage::create("UIres/weapon.png","UIres/weapon2.png",this,menu_selector(ChooseScene::menuGoToWeapon));
-    WeaponItem->setPosition(size.width*6/7,size.height/2-20);
+    WeaponItem->setPosition(size.width*3/4,size.height/2-25);
     auto * MenuToWeapon = Menu::create(WeaponItem, NULL);
     MenuToWeapon->setPosition(Point::ZERO);
     this->addChild(MenuToWeapon,3);
@@ -124,22 +124,22 @@ bool ChooseScene::init()
     
     
     //人物界面准备
-    auto *characterttf = Label::createWithTTF("选择人物","fonts/chicken.ttf", 16);
-    characterttf -> setPosition(size.width*2/7, size.height*5/7);
+    auto *characterttf = Label::createWithTTF("选择人物","fonts/chicken.ttf", 35);
+    characterttf -> setPosition(size.width*1/4, size.height*5/7-20);
     addChild(characterttf,2);
 
     
     //跳转选择人物界面
     auto * CharacterItem = MenuItemImage::create("UIres/character.png","UIres/character2.png",this,menu_selector(ChooseScene::menuGoToCharacter));
-    CharacterItem->setPosition(size.width*2/7,size.height/2-20);
+    CharacterItem->setPosition(size.width*1/4,size.height/2-25);
     auto * MenuToCharacter = Menu::create(CharacterItem, NULL);
     MenuToCharacter->setPosition(Point::ZERO);
     this->addChild(MenuToCharacter,3);
     
     
     //选择单机/联机模式准备
-    auto *next = Label::createWithTTF("NEXT！","fonts/chicken.ttf", 20);
-    next-> setPosition(size.width*4/7+5, size.height*1/9);
+    auto *next = Label::createWithTTF("NEXT！","fonts/chicken.ttf", 40);
+    next-> setPosition(size.width/2+5, size.height*1/9);
     addChild(next,3);
 //    auto *nextbg = createMenuItem2Img("okbuttom.png","okbuttom.png");
 //    nextbg -> setPosition(size.width*4/7,size.height*1/9);
@@ -147,7 +147,7 @@ bool ChooseScene::init()
 //    nextItem -> setPosition(Point::ZERO);
 //    addChild(nextItem,2);
     auto nextItem = Button::create("UIres/okbuttom.png");
-    nextItem -> cocos2d::Node::setPosition(size.width*4/7, size.height*1/9);
+    nextItem -> cocos2d::Node::setPosition(size.width/2, size.height*1/9);
     addChild(nextItem,2);
     
     nextItem -> addClickEventListener([this](Ref* ref)

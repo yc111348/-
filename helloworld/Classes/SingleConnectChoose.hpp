@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include "cocos2d.h"
+#include "Heroscene.hpp"
 
 USING_NS_CC;
 

@@ -37,7 +37,7 @@ void HelloWorld::initUI()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     //退出（加确认）
     _pauseButton = ui::Button::create("UIres/close1.png");
-    _pauseButton -> cocos2d::Node::setPosition(visibleSize.width+8,15);
+    _pauseButton -> cocos2d::Node::setPosition(visibleSize.width-40,40);
     addChild(_pauseButton,1);
 
     _pauseButton -> addClickEventListener([this](Ref* ref)
@@ -76,7 +76,7 @@ void HelloWorld::initUI()
     
     
     //游戏标题
-    auto label = Label::createWithTTF("求你别出BUG啦！", "fonts/chicken.ttf", 24);
+    auto label = Label::createWithTTF("弓箭手大作战", "fonts/chicken.ttf", 48);
     if (label == nullptr)
     {
         problemLoading("'fonts/chicken.ttf'");
@@ -84,8 +84,8 @@ void HelloWorld::initUI()
     else
     {
         // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width*6/11,
-                                origin.y + visibleSize.height*6/7 - label->getContentSize().height));
+        label->setPosition(Vec2(visibleSize.width/2,
+                                visibleSize.height*3/4));
         
         // add the label as a child to this layer
         this->addChild(label, 1);
@@ -93,14 +93,14 @@ void HelloWorld::initUI()
     
     
     //"点击进入游戏"
-    auto Entergame = Label::createWithTTF("点击此处进入游戏", "fonts/chicken.ttf", 12);
+    auto Entergame = Label::createWithTTF("点击此处进入游戏", "fonts/chicken.ttf", 48);
     if (Entergame == nullptr)
     {
         problemLoading("'fonts/chicken.ttf'");
     }
     else
     {
-        Entergame->setPosition(Vec2(visibleSize.width * 4/7,
+        Entergame->setPosition(Vec2(visibleSize.width/2,
                                     visibleSize.height * 1/3));
         
         this->addChild(Entergame, 1);
@@ -128,5 +128,4 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
     CocosDenshion::SimpleAudioEngine::getInstance()->end();
-
 }

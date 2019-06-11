@@ -25,12 +25,12 @@ bool TeamScene::init()
     //背景图片
     Size size = Director::getInstance()->getVisibleSize();
     Sprite  *background = Sprite::create("UIres/background.png");
-    background->setPosition(size.width*4/7,size.height/2);
+    background->setPosition(size.width/2,size.height/2);
     addChild(background,0);
     
     //返回上一层按钮
     auto * ReturnItem = MenuItemImage::create("UIres/returnL.png","UIres/returnL2.png",this,menu_selector(TeamScene::menuGoToSCCScene));
-    ReturnItem->setPosition(size.width/7,size.height*8/9+10);
+    ReturnItem->setPosition(size.width/7-60,size.height*8/9+20);
     auto * MenuToChoose = Menu::create(ReturnItem, NULL);
     MenuToChoose->setPosition(Point::ZERO);
     this->addChild(MenuToChoose,1);

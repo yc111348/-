@@ -26,39 +26,39 @@ bool WeaponScene::init()
     //背景图片
     Size size = Director::getInstance()->getVisibleSize();
     Sprite  *background = Sprite::create("UIres/background.png");
-    background->setPosition(size.width*4/7,size.height/2);
+    background->setPosition(size.width/2,size.height/2);
     addChild(background,0);
     
     
     //返回上一层按钮
     auto * ReturnItem = MenuItemImage::create("UIres/returnL.png","UIres/returnL2.png",this,menu_selector(WeaponScene::menuGoToChooseScene));
-    ReturnItem->setPosition(size.width/7,size.height*8/9+10);
+    ReturnItem->setPosition(size.width/7-60,size.height*8/9+20);
     auto * MenuToChoose = Menu::create(ReturnItem, NULL);
     MenuToChoose->setPosition(Point::ZERO);
     this->addChild(MenuToChoose,1);
     //按钮"我选好了！"
     auto * OkItem = MenuItemImage::create("UIres/yes.png","UIres/no.png",this,menu_selector(WeaponScene::menuGoToChooseScene));
-    OkItem->setPosition(size.width*4/7, size.height*1/7);
+    OkItem->setPosition(size.width/2, size.height*1/7);
     auto * MenuOkToChoose = Menu::create(OkItem, NULL);
     MenuOkToChoose->setPosition(Point::ZERO);
     this->addChild(MenuOkToChoose,1);
-    auto * ConfirmTTF = Label::createWithTTF("我选好啦！", "fonts/chicken.ttf", 18);
-    ConfirmTTF -> setPosition(size.width*4/7+6, size.height*1/7);
+    auto * ConfirmTTF = Label::createWithTTF("我选好啦！", "fonts/chicken.ttf", 40);
+    ConfirmTTF -> setPosition(size.width/2+6, size.height*1/7);
     addChild(ConfirmTTF,2);
 
 
     
     //"请选择武器！"
-    auto *hint = Label::createWithTTF("请选择你的武器","fonts/chicken.ttf", 24);
-    hint -> setPosition(size.width*4/7, size.height*6/7);
+    auto *hint = Label::createWithTTF("请选择你的武器","fonts/chicken.ttf", 50);
+    hint -> setPosition(size.width/2, size.height*6/7);
     hint -> setColor(Color3B(54,54,54));
     addChild(hint,1);
     
     //武器选择
     auto * BaseMap1 = Sprite::create("UIres/W_C_BG.png");
     auto * BaseMap2 = Sprite::create("UIres/W_C_BG.png");
-    BaseMap1 -> setPosition(size.width*2/7, size.height/2);
-    BaseMap2 -> setPosition(size.width*6/7, size.height/2);
+    BaseMap1 -> setPosition(size.width*1/4, size.height/2);
+    BaseMap2 -> setPosition(size.width*3/4, size.height/2);
     addChild(BaseMap1,1);
     addChild(BaseMap2,1);
     auto HeavenFire = Sprite::create("UIres/HeavenFire.png");

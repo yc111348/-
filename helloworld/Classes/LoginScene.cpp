@@ -62,31 +62,31 @@ bool LoginScene::init()
     //背景图片
     Size size = Director::getInstance()->getVisibleSize();
     Sprite  *background = Sprite::create("UIres/background.png");
-    background->setPosition(size.width*4/7,size.height/2);
+    background->setPosition(size.width/2,size.height/2);
     addChild(background,0);
     
     //输入框
     auto inputbox = Sprite::create("UIres/LoginGUI.png");
-    inputbox->setPosition(size.width*4/7,size.height/2);
+    inputbox->setPosition(size.width/2,size.height/2);
     addChild(inputbox,1);
     
     //输入框控件
     auto editBox = EditBox::create(Size(inputbox->getContentSize().width,inputbox->getContentSize().height*0.7),cocos2d::ui::Scale9Sprite::create());
-    editBox -> setPosition(ccp(325, 60));
+    editBox -> setPosition(ccp(size.width*2/3, 150));
     editBox -> setMaxLength(16);//最多输入八个字符
     editBox -> setText("请输入昵称");
-    editBox -> setFont("fonts/chicken.ttf", 12);
+    editBox -> setFont("fonts/chicken.ttf", 25);
     editBox -> setFontColor(Color3B(255,255,255));
     addChild(editBox,2);
     
     auto signup = Label::createWithTTF("Sign up","fonts/chicken.ttf", 18);
-    signup -> setPosition(size.width*4/7,size.height*11/13);
+    signup -> setPosition(size.width/2,size.height*11/13);
     addChild(signup,3);
     
-    auto hint1 = Label::createWithTTF("Please entet your name ","fonts/chicken.ttf", 14);
-    auto hint2 = Label::createWithTTF(" Within 16 characters ","fonts/chicken.ttf", 14);
-    hint1 -> setPosition(size.width*4/7,size.height*2/3);
-    hint2 -> setPosition(size.width*4/7,size.height*2/3-20);
+    auto hint1 = Label::createWithTTF("Please entet your name ","fonts/chicken.ttf", 28);
+    auto hint2 = Label::createWithTTF(" Within 16 characters ","fonts/chicken.ttf", 28);
+    hint1 -> setPosition(size.width/2,size.height*2/3);
+    hint2 -> setPosition(size.width/2,size.height*2/3-30);
     hint1 -> setColor(Color3B(142, 229, 238));
     hint2 -> setColor(Color3B(142, 229, 238));
     addChild(hint1,3);
@@ -95,12 +95,12 @@ bool LoginScene::init()
    // OK按钮
     
     auto * OkButtom = MenuItemImage::create("UIres/okbuttom.png","UIres/okbuttom1.png",this,menu_selector(LoginScene::menuGoToHelloworld));
-    OkButtom->setPosition(ccp(245,90));
+    OkButtom->setPosition(size.width/2,size.height*4/13);
     auto * MenuToOk = Menu::create(OkButtom, NULL);
     MenuToOk->setPosition(Point::ZERO);
     this->addChild(MenuToOk,3);
-    auto OK = Label::createWithTTF("OK","fonts/chicken.ttf", 18);
-    OK -> setPosition(size.width*4/7,size.height*15/52);
+    auto OK = Label::createWithTTF("OK","fonts/chicken.ttf", 43);
+    OK -> setPosition(size.width/2,size.height*4/13);
     addChild(OK,4);
 //    auto *OkButtom = createMenuItem2Img("okbuttom.png","okbuttom.png");
 //    OkButtom -> setCallback([&,editBox](Ref*obj)
@@ -133,7 +133,7 @@ bool LoginScene::init()
     //音乐暂停/播放
     //Pause
     auto MusicItemOff = createMenuItem2Img("UIres/MusicOff1.png","UIres/MusicOff1.png");
-    MusicItemOff -> setPosition(size.width*1/5, size.height*11/12);
+    MusicItemOff -> setPosition(size.width*1/10, size.height*11/12);
     auto menuMusicOff = Menu::create(MusicItemOff,NULL);
     menuMusicOff -> setPosition(Point::ZERO);
     addChild(menuMusicOff,4);
@@ -150,7 +150,7 @@ bool LoginScene::init()
 
     //Resume
     auto MusicItemOn = createMenuItem2Img("UIres/MusicOn1.png","UIres/MusicOn1.png");
-    MusicItemOn -> setPosition(size.width*19/20, size.height*11/12);
+    MusicItemOn -> setPosition(size.width*9/10, size.height*11/12);
     auto menuMusicOn = Menu::create(MusicItemOn,NULL);
     menuMusicOn -> setPosition(Point::ZERO);
     addChild(menuMusicOn,4);
@@ -168,7 +168,7 @@ bool LoginScene::init()
     
     //退出
     _pauseButton = ui::Button::create("UIres/close1.png");
-    _pauseButton -> cocos2d::Node::setPosition(size.width+8,15);
+    _pauseButton -> cocos2d::Node::setPosition(size.width-40,40);
     addChild(_pauseButton,1);
     
     _pauseButton -> addClickEventListener([this](Ref* ref)

@@ -33,19 +33,19 @@ bool PopupBox::init()
     auto box = ui::Scale9Sprite::create("UIres/popupBG.png");
     auto continueButtom = ui::Button::create("UIres/yes.png");
     auto endGameButtom = ui::Button::create("UIres/no.png");
-    auto title = Label::createWithTTF("你确认退出游戏吗？", "fonts/chicken.ttf", 24);
-    auto yesttf = Label::createWithTTF("继续游戏", "fonts/chicken.ttf", 16);
-    auto nottf = Label::createWithTTF("确认退出", "fonts/chicken.ttf", 16);
-    box -> setContentSize(Size(300,200));
-    box -> setPosition(size.width/2+30, size.height/2);
+    auto title = Label::createWithTTF("你确认退出游戏吗？", "fonts/chicken.ttf", 48);
+    auto yesttf = Label::createWithTTF("继续游戏", "fonts/chicken.ttf", 35);
+    auto nottf = Label::createWithTTF("确认退出", "fonts/chicken.ttf", 35);
+    box -> setContentSize(Size(700,470));
+    box -> setPosition(size.width/2, size.height/2);
     
-    yesttf -> setPosition(continueButtom->getPositionX()+50, continueButtom->getPositionY()+20);
-    nottf -> setPosition(endGameButtom->getPositionX()+50, endGameButtom->getPositionY()+20);
+    yesttf -> setPosition(continueButtom->getPositionX()+100, continueButtom->getPositionY()+40);
+    nottf -> setPosition(endGameButtom->getPositionX()+100, endGameButtom->getPositionY()+40);
     
-    continueButtom -> cocos2d::Node::setPosition(Vec2(size.width/3+30,size.height/3));
-    endGameButtom -> cocos2d::Node::setPosition(Vec2(size.width*2/3+30,size.height/3));
+    continueButtom -> cocos2d::Node::setPosition(Vec2(size.width/3,size.height/3));
+    endGameButtom -> cocos2d::Node::setPosition(Vec2(size.width*2/3,size.height/3));
     
-    title -> setPosition(size.width/2-50,size.height*2/3-60);
+    title -> setPosition(size.width/2-160,size.height*2/3-200);
     title -> setColor(Color3B(219,112,147));
     
     
