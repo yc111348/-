@@ -71,7 +71,7 @@ bool LoginScene::init()
     addChild(inputbox,1);
     
     //输入框控件
-    auto editBox = EditBox::create(Size(inputbox->getContentSize().width,inputbox->getContentSize().height*0.7),cocos2d::ui::Scale9Sprite::create());
+    editBox = EditBox::create(Size(inputbox->getContentSize().width,inputbox->getContentSize().height*0.7),cocos2d::ui::Scale9Sprite::create());
     editBox -> setPosition(ccp(size.width*2/3, 150));
     editBox -> setMaxLength(16);//最多输入八个字符
     editBox -> setText("请输入昵称");
@@ -200,6 +200,9 @@ void LoginScene::menuGoToHelloworld(Ref* Sender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT) || (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
     MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
 #else
+    std::string username = editBox -> getText();
+    UserDefault::getInstance()->setStringForKey("Username",username.c_str());  //根据键值写入std::string类型字符串
+    log("%s",username.c_str());
     Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.4f,ChooseScene::createScene()));
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);

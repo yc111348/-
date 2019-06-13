@@ -22,6 +22,7 @@ public:
     static Scene* createScene();
     CREATE_FUNC(TeamScene);
     
+    void menuGoToSCCScene(cocos2d::Ref * Sender);
 };
 
 #endif /* TeamScene_hpp */

@@ -50,41 +50,6 @@ bool Hero::init()
     auto mapgo = map->getLayer("move");
     mapgo->setVisible(false);
     
-    //    获取地图属性
-    //    auto mapProperties = map->getProperties();
-    //    //地图名字本身的属性
-    //    auto str=mapProperties["type"].asString();
-    //    log("属性是%s",str.c_str());
-    //
-    //    //获取图层属性
-    //    auto scenelayer=map->getLayer("scene");
-    //    //先找到图层
-    //    auto layerp=scenelayer->getProperties();
-    //    //找到图层的属性
-    //    log("属性是%s",layerp["type"].asString().c_str());
-    //    //找到对应的属性，用数组的方式输出
-    //
-    //
-    //    //获取对象属性
-    //    auto obje = map->getObjectGroup("ob");
-    //    //获取对象组
-    //    auto obj=obje->getObject("juxing1");
-    //    //修改颜色
-    //    auto color=obje->getObject("juxing1");
-    //    auto colorx=color["x"].asFloat();
-    //    auto colory=color["y"].asFloat();
-    //    auto colorw=color["width"].asInt()/8;
-    //    auto colorh=color["height"].asInt()/8;
-    //
-    //    for(int x=colorx;x<colorx+colorw;x++)
-    //    {
-    //        for(int y=colory;y<colorh+colory;y++)
-    //        {
-    ////            auto sprite=scenelayer->getTileAt(Vec2(map->getMapSize().width-x,map->getMapSize().height-y));
-    //            auto sprite=scenelayer->getTileAt(Vec2(x=colorx,colory));
-    //            sprite->setColor(Color3B(255,0,0));
-    //        }
-    //    }
     
     
     //1.读取素材文件
@@ -175,16 +140,14 @@ bool Hero::init()
     s_animation1 = Animation::createWithSpriteFrames(s_animFrames1, 0.3);
     hero->runAction(RepeatForever::create(Animate::create(s_animation1))); //测试动画
     
+    //--------------------加入用户昵称------------------//
+    std::string name = UserDefault::getInstance()->getStringForKey("Username");
+    auto username = Label::createWithTTF(name,"fonts/chicken.ttf" , 20);
+    username -> setColor(Color3B(0,0,0));
+    username->  setPosition(hero_x+315,hero_y+450);
+    hero -> addChild(username,100);
+    //--------------------结      束-------------------//
     
-    
-    
-    //4.执行动画
-    //    s_animation1 = Animation::createWithSpriteFrames(s_animFrames1, 0.3);
-    //    hero->runAction(RepeatForever::create(Animate::create(s_animation1))); //测试动画
-    //    animation1 = Animation::createWithSpriteFrames(animFrames1, 0.3);
-    //    hero->runAction(RepeatForever::create(Animate::create(animation1))); //测试动画
-    //    animation2 = Animation::createWithSpriteFrames(animFrames2, 0.3);
-    //    hero->runAction(RepeatForever::create(Animate::create(animation2))); //测试动画
     
     
     
@@ -206,13 +169,13 @@ bool Hero::init()
     
     //血条消失术
     m_pProgressView = new ProgressView();
-    m_pProgressView->setScale(0.5);
+    m_pProgressView->setScale(1,0.5);
     m_pProgressView->setPosition(hero_x+315,hero_y+430);
     m_pProgressView->setBackgroundTexture("noblood.png");
     m_pProgressView->setForegroundTexture("fullblood.png");
     m_pProgressView->setTotalProgress(100.0f);
     m_pProgressView->setCurrentProgress(100.0f);
-    hero -> addChild(m_pProgressView);
+    hero -> addChild(m_pProgressView,1);
     //结束
     //子弹发射术
     
@@ -221,55 +184,6 @@ bool Hero::init()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listenermouse, this);
     //结束
     
-    //测试移动镜头跟随
-    
-    //    auto vsize = Director::getInstance()->getVisibleSize();
-    //    auto mapTN=map->getMapSize();
-    //    auto tiledSize = map->getTileSize();
-    //    auto mapsize = Size(mapTN.width*tiledSize.width,mapTN.height*tiledSize.height);
-    //    auto hpos=hero->getPosition();
-    //    auto x = MAX(hpos.x,vsize.width/2);
-    //    auto y = MAX(hpos.y,vsize.height/2);
-    //    x = MIN(x,mapsize.width-vsize.width/2);
-    //    y = MIN(y,mapsize.height-vsize.height/2);
-    //    auto destpos=Vec2(x,y);
-    //    auto centerpos = Vec2(vsize.width/2,vsize.height/2);
-    //    auto viewpos = centerpos - destpos;
-    //    this -> setPosition(viewpos);
-    
-    
-    
-    
-    //结束
-    //    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    //    if (label == nullptr)
-    //    {
-    //        problemLoading("'fonts/Marker Felt.ttf'");
-    //    }
-    //    else
-    //    {
-    //        // position the label on the center of the screen
-    //        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-    //                                origin.y + visibleSize.height - label->getContentSize().height));
-    //
-    //        // add the label as a child to this layer
-    //        this->addChild(label, 1);
-    //    }
-    
-    // add "HelloWorld" splash screen"
-    //    auto sprite = Sprite::create("HelloWorld.png");
-    //    if (sprite == nullptr)
-    //    {
-    //        problemLoading("'HelloWorld.png'");
-    //    }
-    //    else
-    //    {
-    //        // position the sprite on the center of the screen
-    //        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    //
-    //        // add the sprite as a child to this layer
-    //        this->addChild(sprite, 0);
-    //    }
     return true;
 }
 

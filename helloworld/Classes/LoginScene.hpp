@@ -26,6 +26,8 @@ public:
     MenuItemSprite* createMenuItem2Img(const std::string imgA,const std::string imgB);
     void onMenuCloseCallback(cocos2d::Ref *sender);
     void menuGoToHelloworld(cocos2d::Ref * Sender);
+    
+    cocos2d::ui::EditBox* editBox;
 };
 
 #endif /* LoginScene_hpp */
