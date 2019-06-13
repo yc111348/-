@@ -24,7 +24,7 @@ Scene* WeaponScene::createScene()
 bool WeaponScene::init()
 {
     //背景图片
-    Size size = Director::getInstance()->getVisibleSize();
+    size = Director::getInstance()->getVisibleSize();
     Sprite  *background = Sprite::create("UIres/background.png");
     background->setPosition(size.width/2,size.height/2);
     addChild(background,0);
@@ -67,6 +67,38 @@ bool WeaponScene::init()
     fifth -> setPosition(BaseMap2->getContentSize()/2);
     BaseMap1 -> addChild(HeavenFire);
     BaseMap2 -> addChild(fifth);
+    
+    //选择按钮
+    auto selectbutton = ui::Button::create("UIres/selectbutton2.png");
+    selectbutton -> cocos2d::Node::setPosition(size.width/4, size.height/3);
+    selectbutton -> setScale(0.25);
+    addChild(selectbutton,3);
+    auto selectbutton2 = ui::Button::create("UIres/selectbutton2.png");
+    selectbutton2 -> cocos2d::Node::setPosition(size.width*3/4, size.height/3);
+    selectbutton2 -> setScale(0.25);
+    addChild(selectbutton2,3);
+    nike1 = Sprite::create("UIres/selectbutton.png");
+    nike1 -> cocos2d::Node::setPosition(size.width/4, size.height/3);
+    nike1 -> setScale(0.25);
+    nike1 -> setVisible(false);
+    addChild(nike1,4);
+    nike2 = Sprite::create("UIres/selectbutton.png");
+    nike2 -> cocos2d::Node::setPosition(size.width*3/4, size.height/3);
+    nike2 -> setScale(0.25);
+    addChild(nike2,4);
+    nike2->setVisible(false);
+    selectbutton -> addClickEventListener([this](Ref * ref)
+                                          {
+                                              nike1 -> setVisible(true);
+                                              nike2 -> setVisible(false);
+                                              UserDefault::getInstance()->setIntegerForKey("weapon",1);
+                                          });
+    selectbutton2 -> addClickEventListener([this](Ref * ref)
+                                           {
+                                               nike2 -> setVisible(true);
+                                               nike1 -> setVisible(false);
+                                               UserDefault::getInstance()->setIntegerForKey("weapon",2);
+                                           });
     
     
     

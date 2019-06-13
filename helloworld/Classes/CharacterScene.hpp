@@ -24,6 +24,11 @@ public:
     void menuGoToChooseScene(cocos2d::Ref * Sender);
     void rolemove1();
     void rolemove2();
+    
+    void update(float delta) override;
+    cocos2d::Sprite* nike1;
+    cocos2d::Sprite* nike2;
+    Size size;
 };
 
 

@@ -5,6 +5,7 @@
 //  Created by 董震宇 on 2019/6/1.
 //
 #include "popOUT.hpp"
+#include "popOUT2.hpp"
 #include "ChooseScene.hpp"
 #include "HelloWorldScene.h"
 #include "WeaponScene.hpp"
@@ -141,18 +142,33 @@ bool ChooseScene::init()
     auto *next = Label::createWithTTF("NEXT！","fonts/chicken.ttf", 40);
     next-> setPosition(size.width/2+5, size.height*1/9);
     addChild(next,3);
-//    auto *nextbg = createMenuItem2Img("okbuttom.png","okbuttom.png");
-//    nextbg -> setPosition(size.width*4/7,size.height*1/9);
-//    auto nextItem = Menu::create(nextbg,NULL);
-//    nextItem -> setPosition(Point::ZERO);
-//    addChild(nextItem,2);
+
     auto nextItem = Button::create("UIres/okbuttom.png");
     nextItem -> cocos2d::Node::setPosition(size.width/2, size.height*1/9);
     addChild(nextItem,2);
     
     nextItem -> addClickEventListener([this](Ref* ref)
                                       {
-                                          Director::getInstance()->replaceScene( TransitionProgressRadialCCW::create(1.0f,SingleConnectChooseScene::createScene()));
+                                          int x = UserDefault::getInstance()->getIntegerForKey("hero");
+                                          int y = UserDefault::getInstance()->getIntegerForKey("weapon");
+                                          if(x != 0 && y != 0)
+                                          {
+                                              Director::getInstance()->replaceScene( TransitionProgressRadialCCW::create(1.0f,SingleConnectChooseScene::createScene()));
+                                          }
+                                          if(x == 0 || y == 0)
+                                          {
+                                              this -> unscheduleUpdate();
+                                              auto popupbox = Popup2::create();
+                                              
+                                              popupbox -> registerCallback([this,popupbox](){
+                                                  popupbox -> removeFromParent();
+                                                  this ->scheduleUpdate();
+                                              },[](){
+                                                  Director::getInstance()->end();
+                                              });
+                                              this -> addChild(popupbox,100);
+                                          }
+
                                       });
 
     

@@ -76,7 +76,7 @@ void HelloWorld::initUI()
     
     
     //游戏标题
-    auto label = Label::createWithTTF("弓箭手大作战", "fonts/chicken.ttf", 48);
+    auto label = Label::createWithTTF("弓箭手大作战", "fonts/chicken.ttf", 68);
     if (label == nullptr)
     {
         problemLoading("'fonts/chicken.ttf'");
@@ -93,7 +93,7 @@ void HelloWorld::initUI()
     
     
     //"点击进入游戏"
-    auto Entergame = Label::createWithTTF("点击此处进入游戏", "fonts/chicken.ttf", 48);
+    auto Entergame = Label::createWithTTF("点击此处进入游戏", "fonts/chicken.ttf", 28);
     if (Entergame == nullptr)
     {
         problemLoading("'fonts/chicken.ttf'");
@@ -119,7 +119,14 @@ void HelloWorld::initUI()
         return false;
     };
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerEnterGame, Entergame);
+    
+    
+    //------------文件读写操作开始-------------//
+    UserDefault::getInstance()->setIntegerForKey("hero",0);
+    UserDefault::getInstance()->setIntegerForKey("weapon",0);
+    //------------文件读写操作结束-------------//
 
+    
 }
 
 

@@ -23,6 +23,10 @@ public:
     MenuItemSprite* createMenuItem2Img(const std::string imgA,const std::string imgB);
     void onMenuCloseCallback(cocos2d::Ref *sender);
     void menuGoToChooseScene(cocos2d::Ref * Sender);
+    
+    cocos2d::Sprite* nike1;
+    cocos2d::Sprite* nike2;
+    Size size;
 };
 
 

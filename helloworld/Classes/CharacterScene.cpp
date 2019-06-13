@@ -24,7 +24,7 @@ Scene* CharacterScene::createScene()
 bool CharacterScene::init()
 {
     //背景图片
-    Size size = Director::getInstance()->getVisibleSize();
+    size = Director::getInstance()->getVisibleSize();
     Sprite  *background = Sprite::create("UIres/background.png");
     background->setPosition(size.width/2,size.height/2);
     addChild(background,0);
@@ -63,12 +63,54 @@ bool CharacterScene::init()
     addChild(BaseMap1,1);
     addChild(BaseMap2,1);
     
+    //人物动画
     rolemove1();
     rolemove2();
     
+    //选择按钮
+    auto selectbutton = ui::Button::create("UIres/selectbutton2.png");
+    selectbutton -> cocos2d::Node::setPosition(size.width/4, size.height/3);
+    selectbutton -> setScale(0.25);
+    addChild(selectbutton,3);
+    auto selectbutton2 = ui::Button::create("UIres/selectbutton2.png");
+    selectbutton2 -> cocos2d::Node::setPosition(size.width*3/4, size.height/3);
+    selectbutton2 -> setScale(0.25);
+    addChild(selectbutton2,3);
+    nike1 = Sprite::create("UIres/selectbutton.png");
+    nike1 -> cocos2d::Node::setPosition(size.width/4, size.height/3);
+    nike1 -> setScale(0.25);
+    nike1 -> setVisible(false);
+    addChild(nike1,4);
+    nike2 = Sprite::create("UIres/selectbutton.png");
+    nike2 -> cocos2d::Node::setPosition(size.width*3/4, size.height/3);
+    nike2 -> setScale(0.25);
+    addChild(nike2,4);
+    nike2->setVisible(false);
+    selectbutton -> addClickEventListener([this](Ref * ref)
+                                            {
+                                                nike1 -> setVisible(true);
+                                                nike2 -> setVisible(false);
+                                                UserDefault::getInstance()->setIntegerForKey("hero",1);
+                                            });
+    selectbutton2 -> addClickEventListener([this](Ref * ref)
+                                           {
+                                               nike2 -> setVisible(true);
+                                               nike1 -> setVisible(false);
+                                               UserDefault::getInstance()->setIntegerForKey("hero",2);
+                                           });
+    
+    
+   // this->scheduleUpdate();
+
     return true;
 }
 
+void CharacterScene::update(float delta)
+{
+    Node::update(delta);
+
+    
+}
 
 void CharacterScene::rolemove1()
 {
@@ -101,26 +143,23 @@ void CharacterScene::rolemove1()
 void CharacterScene::rolemove2()
 {
     SpriteFrameCache* cache2 = SpriteFrameCache::getInstance();
-    cache2->addSpriteFramesWithFile("UIres/role2.plist");
+    cache2->addSpriteFramesWithFile("UIres/attackfront2.plist");
     Vector <SpriteFrame*> animFrames2;
     char str2[100] = {0};
-    for (int i = 0; i < 8; i++)
+    for (int i = 2221; i < 2230; i++)
     {
         sprintf(str2, "%d.png", i);
         SpriteFrame* pFrame2 = cache2->getSpriteFrameByName(str2);
         animFrames2.pushBack(pFrame2);
     }
     Size s = Director::getInstance()->getVisibleSize();
-    Sprite* sprite2 = Sprite::createWithSpriteFrameName("0.png");
+    Sprite* sprite2 = Sprite::createWithSpriteFrameName("2221.png");
     sprite2->setScale(2);
     sprite2->setPosition(Point(s.width *3/4, s.height *1/2-90));
     addChild(sprite2,3);
     Animation* animation2 = Animation::createWithSpriteFrames(animFrames2, 0.3);
     sprite2->runAction(RepeatForever::create(Animate::create(animation2)));
 }
-
-
-
 
 
 void CharacterScene::menuGoToChooseScene(Ref* Sender)
@@ -134,7 +173,6 @@ void CharacterScene::menuGoToChooseScene(Ref* Sender)
 #endif
 #endif
 }
-
 
 
 void CharacterScene::onMenuCloseCallback(Ref *sender)

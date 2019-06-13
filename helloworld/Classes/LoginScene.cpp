@@ -79,8 +79,8 @@ bool LoginScene::init()
     editBox -> setFontColor(Color3B(255,255,255));
     addChild(editBox,2);
     
-    auto signup = Label::createWithTTF("Sign up","fonts/chicken.ttf", 18);
-    signup -> setPosition(size.width/2,size.height*11/13);
+    auto signup = Label::createWithTTF("Sign up","fonts/chicken.ttf", 38);
+    signup -> setPosition(size.width/2,size.height*11/13-20);
     addChild(signup,3);
     
     auto hint1 = Label::createWithTTF("Please entet your name ","fonts/chicken.ttf", 28);
