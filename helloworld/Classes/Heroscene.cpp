@@ -395,10 +395,10 @@ void Hero::update(float delta)
     auto centerpos = Vec2(vsize.width/2,vsize.height/2);
     viewpos = centerpos - destpos;
     this -> setPosition(viewpos);
-    if( (!bulletinenemy)&&enemylive)
-    {
-        popif(2);
-    }
+    
+    popif(1);
+    popif(2);
+    
     if(time==itemtime)
     {
         itemtimecoming();
@@ -713,16 +713,22 @@ void Hero::popif(int whobeatwho)
 {
     if(whobeatwho==1)
     {
-        if(hero->getBoundingBox().containsPoint(bullet->getPosition()))
+        if( (!bullet2inhero)&&(bullet2inair) )
         {
-            popgo(1);
+            if(((hero->getPositionX()-20) < (bullet2->getPositionX())) &&  ( (bullet2->getPositionX())< (hero->getPositionX()+60)  )  &&((hero->getPositionY()) < (bullet2->getPositionY())) &&  ( (bullet2->getPositionY())< (hero->getPositionY()+80)  ) )
+            {
+                popgo(1);
+            }
         }
     }
     if(whobeatwho==2)
     {
-        if(((enemy->getPositionX()-20) < (bullet->getPositionX())) &&  ( (bullet->getPositionX())< (enemy->getPositionX()+85)  )  &&((enemy->getPositionY()) < (bullet->getPositionY())) &&  ( (bullet->getPositionY())< (enemy->getPositionY()+128)  )   )
+        if( (!bulletinenemy)&&enemylive&&isbullet)
         {
-            popgo(2);
+            if(((enemy->getPositionX()-20) < (bullet->getPositionX())) &&  ( (bullet->getPositionX())< (enemy->getPositionX()+85)  )  &&((enemy->getPositionY()) < (bullet->getPositionY())) &&  ( (bullet->getPositionY())< (enemy->getPositionY()+128)  )   )
+            {
+                popgo(2);
+            }
         }
     }
 }
@@ -731,7 +737,24 @@ void Hero::popgo(int whogodie)
 {
     if(whogodie==1)
     {
-        
+        hero_blood-=10;
+        bullet2inhero=1;
+        bullet2->stopAllActions();
+        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()-10);
+        auto callbackfunc = [=]()
+        {
+            
+            bullet2inair=0;
+            bullet2->setVisible(false); bullet2->setPosition(50,50);
+            bullet2inhero=0;
+        };
+        auto callFunc= CallFunc::create(callbackfunc);
+        auto actions = Sequence::create(DelayTime::create(0.3),callFunc,NULL);
+        bullet2->runAction(actions);
+        if(hero_blood<=0)
+        {
+            gotodie(1);
+        }
     }
     if(whogodie==2)
     {
@@ -743,14 +766,13 @@ void Hero::popgo(int whogodie)
         {
             
             isbullet=0;
-            bullet->setVisible(false); bullet->setPosition(Director::getInstance()->getVisibleSize().width/2,Director::getInstance()->getVisibleSize().height/2);
-            isbullet=0;
+            bullet->setVisible(false); bullet->setPosition(50,50);
             bulletinenemy=0;
         };
         auto callFunc=CallFunc::create(callbackfunc);
         auto actions = Sequence::create(DelayTime::create(0.3),callFunc,NULL);
         bullet->runAction(actions);
-        if(enemyblood==0)
+        if(enemyblood<=0)
         {
             gotodie(2);
         }
@@ -759,8 +781,13 @@ void Hero::popgo(int whogodie)
 
 void Hero::gotodie(int who)
 {
+    if(who==1)
+    {
+        log("haha  ,  han han");
+    }
     if(who==2)
     {
+        enemylive = 0;
         auto callbackfunc1 = [=]()
         {
             enemy->setVisible(false);
@@ -771,10 +798,9 @@ void Hero::gotodie(int who)
         };
         auto callbackfunc3 = [=]()
         {
-            enemy->setPosition(50,50);
-            enemy->removeFromParent();
             bullet2->setVisible(false);
-            enemylive = 0;
+            enemy->setPosition(250,250);
+            enemy->removeFromParent();
         };
         enemy->stopAllActions();
         auto callFunc1=CallFunc::create(callbackfunc1);
@@ -1512,7 +1538,7 @@ void Hero::enemyforup()
     if(time==enemytime&&!enemylive)
     {
         enemycoming();
-        enemytime+=1800;
+        enemytime+=60000;
     }
     if(enemylive)
     {
@@ -1531,28 +1557,28 @@ void Hero::enemyforup()
     }
     if( (bullet2inair) &&(!bullet2inwall) )
     {
-        void couldbullet2go();
+        couldbullet2go();
     }
 }
 
 
 void Hero::couldbullet2go()
 {
-    Point pos=positiontrans(bullet->getPosition());
-    int tiledID =  map->getLayer("move")-> getTileGIDAt(pos);
+    Point pos=positiontrans(bullet2->getPosition());
+    int tiledID = map->getLayer("move")->getTileGIDAt(pos);
     if(tiledID)
     {
         bullet2inwall=1;
-        bullet->stopAllActions();
+        bullet2->stopAllActions();
         auto callbackfunc = [=]()
         {
-            
             bullet2inair=0;
-            bullet->setVisible(false); bullet->setPosition(50,50);
+            bullet2->setVisible(false);
+            bullet2->setPosition(50,50);
             bullet2inwall=0;
         };
         auto callFunc=CallFunc::create(callbackfunc);
-        auto actions = Sequence::create(DelayTime::create(0.3),callFunc,NULL);
-        bullet->runAction(actions);
+        auto actions=Sequence::create(DelayTime::create(0.3),callFunc,NULL);
+        bullet2->runAction(actions);
     }
 }

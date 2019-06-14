@@ -53,6 +53,7 @@ public:
     float point_x,point_y;//点击位置
     float hero_x,hero_y;//英雄实时位置
     //--------------r子弹--------//
+    int bullet2inhero=0;
     void display();
     cocos2d::Point viewpos;
     cocos2d::Point positiontrans(cocos2d::Point pos);
