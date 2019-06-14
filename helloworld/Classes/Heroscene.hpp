@@ -119,6 +119,13 @@ public:
     int hero_shecheng=200;
     int hero_blood=0;
     //结束
+    
+    
+protected:
+    //-----------积分榜----------//
+    cocos2d::Label * ranklist;
+    cocos2d::Label * scorettf;
+    int score;
 };
 
 #endif /* hero_hpp */

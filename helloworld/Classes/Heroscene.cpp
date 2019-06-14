@@ -300,37 +300,17 @@ bool Hero::init()
     };
     
     
+    //实时积分
     
-    //结束
-    //    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    //    if (label == nullptr)
-    //    {
-    //        problemLoading("'fonts/Marker Felt.ttf'");
-    //    }
-    //    else
-    //    {
-    //        // position the label on the center of the screen
-    //        label->setPosition(Vec2(origin.x + visibleSize.width/2,
-    //                                origin.y + visibleSize.height - label->getContentSize().height));
-    //
-    //        // add the label as a child to this layer
-    //        this->addChild(label, 1);
-    //    }
+    ranklist = Label::createWithTTF("积分:", "fonts/chicken.ttf", 40);
+    ranklist -> setColor(Color3B(255,69,0));
+    addChild(ranklist,10);
     
-    // add "HelloWorld" splash screen"
-    //    auto sprite = Sprite::create("HelloWorld.png");
-    //    if (sprite == nullptr)
-    //    {
-    //        problemLoading("'HelloWorld.png'");
-    //    }
-    //    else
-    //    {
-    //        // position the sprite on the center of the screen
-    //        sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    //
-    //        // add the sprite as a child to this layer
-    //        this->addChild(sprite, 0);
-    //    }
+    scorettf = Label::createWithTTF("0", "fonts/chicken.ttf", 40);
+    scorettf -> setColor(Color3B(255,69,0));
+    addChild(scorettf,10);
+    
+    
     return true;
 }
 
@@ -425,6 +405,13 @@ void Hero::update(float delta)
         itemtime+=100;
     }
     itempop();
+    
+    
+    //----------排行榜位置-------------//
+    ranklist -> setPosition(-viewpos.x+100,-viewpos.y+700);
+    scorettf -> setPosition(-viewpos.x+200,-viewpos.y+700);
+    scorettf -> setString(__String::createWithFormat("%i",score)->getCString());
+    //----------结     束-------------//
 }
 
 void Hero::keyPressedDuration(EventKeyboard::KeyCode code)
