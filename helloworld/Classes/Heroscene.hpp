@@ -60,12 +60,18 @@ public:
     int isbullet=0;
     void bulletgo();
     cocos2d::Sprite* bullet;
+    cocos2d::Sprite* bullet2;
+    int bullet2inair=0;
     void couldbulletgo();
+    void couldbullet2go();
     int bulletinwall=0;
+    int bullet2inwall=0;
     int bulletinenemy=0;
     int time=0;
     
+    
     //enemy
+    int enemyacktime=300;
     int enemyblood=100;
     float enemy_x;
     float enemy_y;
@@ -76,10 +82,43 @@ public:
     void enemymove();
     int enemymovetime=0;
     bool canenemygo(int direction);
+    float lenthfromhero[4]={0,0,0,0};
+    int enemydirection=0;
+    void getenemydirection(int enemycode);
+    void getlenth(int direction);
+    void enemyattack();
+    
+    void enemyforup();
+    
+    //结束
     //碰撞检测
     void popif(int whobeatwho);
     void popgo(int whogodie);
     void gotodie(int who);
+    //结束
+    
+    //道具刷新
+    int itemtime = 300;
+    void itemtimecoming();
+    cocos2d::Sprite*  item1;
+    cocos2d::Sprite*  item2;
+    cocos2d::Sprite*  item3;
+    cocos2d::Sprite*  item4;
+    cocos2d::Sprite*  item5;
+    cocos2d::Sprite*  item6;
+    cocos2d::Sprite*  item7;
+    cocos2d::Sprite*  item8;
+    cocos2d::Sprite*  item9;
+    cocos2d::Sprite*  item10;
+    int isitemlive[11]={0,0,0,0,0,0,0,0,0,0,0};
+    cocos2d::Point getitemcreatpos();
+    void itempop();
+    //结束
+    //英雄属性
+    float hero_speed=5;
+    int hero_shecheng=200;
+    int hero_blood=0;
+    //结束
 };
 
 #endif /* hero_hpp */

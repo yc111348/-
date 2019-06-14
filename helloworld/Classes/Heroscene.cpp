@@ -48,10 +48,14 @@ bool Hero::init()
     addChild(map,1);
     auto mapgo = map->getLayer("move");
     mapgo->setVisible(false);
-    bullet = Sprite::create("redball.png");
+    bullet = Sprite::create("item/redball.png");
+    bullet2 = Sprite::create("item/bullet2.png");
     addChild(bullet,4);
+    addChild(bullet2,4);
     bullet->setVisible(false);
-    bullet->setPosition(visibleSize.width/2,visibleSize.height/2);
+    bullet2->setVisible(false);
+    bullet->setPosition(50,50);
+    bullet2->setPosition(50,50);
     
     //    获取地图属性
     //    auto mapProperties = map->getProperties();
@@ -272,11 +276,12 @@ bool Hero::init()
     m_pProgressView = new ProgressView();
     m_pProgressView->setScale(1,0.5);
     m_pProgressView->setPosition(hero_x+315,hero_y+430);
-    m_pProgressView->setBackgroundTexture("noblood.png");
-    m_pProgressView->setForegroundTexture("fullblood.png");
+    m_pProgressView->setBackgroundTexture("item/noblood.png");
+    m_pProgressView->setForegroundTexture("item/heroblood.png");
     m_pProgressView->setTotalProgress(100.0f);
-    m_pProgressView->setCurrentProgress(100.0f);
+    m_pProgressView->setCurrentProgress(50.0f);
     hero -> addChild(m_pProgressView,1);
+    hero_blood=50;
     
     
     
@@ -288,6 +293,11 @@ bool Hero::init()
     //结束
     
 
+    
+    auto listeners = EventListenerTouchOneByOne::create();
+    listeners->onTouchBegan = [=](Touch *t, Event *e){
+        return true;
+    };
     
     
     
@@ -337,27 +347,15 @@ void Hero::menuCloseCallback(Ref* pSender)
 }
 void Hero::update(float delta)
 {
-    
-    if(time==enemytime&&!enemylive)
-    {
-        enemycoming();
-        enemytime+=1800;
-    }
-    if(time==enemymovetime)
-    {
-        enemymove();
-        enemymovetime+=60;
-    }
+    enemyforup();
     time+=1;
-    if(!bulletinwall)
+    if( (!bulletinwall)&&(isbullet) )
     {
         couldbulletgo();
     }
     heropos= hero->getPosition();
     hero_x = hero->getPositionX();
     hero_y = hero->getPositionY();
-    enemy_x = enemy->getPositionX();
-    enemy_y = enemy->getPositionY();
     Node::update(delta);
     auto leftArrow = EventKeyboard::KeyCode::KEY_A, rightArrow = EventKeyboard::KeyCode::KEY_D,upArrow = EventKeyboard::KeyCode::KEY_W,downArrow = EventKeyboard::KeyCode::KEY_S;
     if(isKeyPressed(leftArrow))
@@ -417,50 +415,55 @@ void Hero::update(float delta)
     auto centerpos = Vec2(vsize.width/2,vsize.height/2);
     viewpos = centerpos - destpos;
     this -> setPosition(viewpos);
-    if(!bulletinenemy)
+    if( (!bulletinenemy)&&enemylive)
     {
         popif(2);
     }
+    if(time==itemtime)
+    {
+        itemtimecoming();
+        itemtime+=100;
+    }
+    itempop();
 }
 
 void Hero::keyPressedDuration(EventKeyboard::KeyCode code)
 {
-    int offsetX = 0, offsetY = 0;
+    float offsetX = 0, offsetY = 0;
     switch (code)
     {
         case EventKeyboard::KeyCode::KEY_A:
             dirchange(3);
             if(couldgo(3))
             {
-                offsetX = -5;
+                offsetX = -hero_speed;
             }
             break;
         case EventKeyboard::KeyCode::KEY_W:
             dirchange(2);
             if(couldgo(2))
             {
-                offsetY = 5;
+                offsetY = hero_speed;
             }
             break;
         case EventKeyboard::KeyCode::KEY_S:
             dirchange(1);
             if(couldgo(1))
             {
-                offsetY = -5;
+                offsetY = -hero_speed;
             }
             break;
         case EventKeyboard::KeyCode::KEY_D:
             dirchange(4);
             if(couldgo(4))
             {
-                offsetX = 5;
+                offsetX = hero_speed;
             }
             break;
         default:
             offsetY = offsetX = 0;
             break;
     }
-    // 0.3s代表着动作从开始到结束所用的时间，从而显得不会那么机械。
     auto moveTo = MoveTo::create(0.01, Vec2(hero->getPositionX() + offsetX, hero->getPositionY() + offsetY));
     hero->runAction(moveTo);
 }
@@ -468,33 +471,28 @@ bool Hero::touch(Touch * touch,Event *event)
 {
     if(isbullet==0)
     {
-        bullet->setVisible(true);
         auto visiblesize = Director::getInstance()->getVisibleSize();
         Point pt = touch->getLocation();
         pt = Director::getInstance()->convertToGL(pt);
-        log("view is %f   %f",viewpos.x,viewpos.y);
         pt.x = pt.x - viewpos.x;
         pt.y = pt.y + viewpos.y;
-        log("Click");
         point_x = pt.x;
         point_y = pt.y;
-        log("%f,%f",point_x,point_y);
         float deltx,delty;
         deltx = point_x - hero_x;
         delty = visiblesize.height - point_y - hero_y;
         float delta = sqrt(deltx*deltx + delty*delty);
         float ex = deltx/delta;
         float ey = delty/delta;
-        int n = 300;//shecheng
         bullet->setPosition(hero_x, hero_y);
-        auto fire = MoveBy::create(0.3,Vec2(n*ex,n*ey));
+        bullet->setVisible(true);
+        auto fire = MoveBy::create(0.3,Vec2(hero_shecheng*ex,hero_shecheng*ey));
         isbullet=1;
         auto callbackfunc = [=]()
         {
             isbullet=0;
-            log("111");
             bullet->setVisible(false);
-            bullet->setPosition(Director::getInstance()->getVisibleSize().width/2,Director::getInstance()->getVisibleSize().height/2);
+            bullet->setPosition(50,50);
         };
         auto callFunc=CallFunc::create(callbackfunc);
         auto actions = Sequence::create(fire,DelayTime::create(0.3),callFunc,NULL);
@@ -529,7 +527,6 @@ void Hero::dirchange(int dir)
         }
         if(dir==4)
         {
-            log("按了按了");
             hero->stopAllActions();
             auto animation4 = Animation::createWithSpriteFrames(animFrames4, 0.15);
             hero->runAction(RepeatForever::create(Animate::create(animation4))); //测试动画
@@ -542,9 +539,7 @@ Point Hero::positiontrans(cocos2d::Point pos)
     auto mapTiledNum = map->getMapSize();
     auto tiledSize = map->getTileSize();
     float x = pos.x/tiledSize.width;
-    log("tiledSize=%f",tiledSize.width);
     float y=(2880-pos.y)/tiledSize.height;
-    log("x=%f   y=%f",x,y);
     if(x>0)
     {
         x-=1;
@@ -579,7 +574,6 @@ bool Hero::couldgo(int direction)
     auto maplayer = map->getLayer("move");
     Point pos=positiontrans(heropos);
     int tiledID =  maplayer -> getTileGIDAt(pos+temp);
-    log("ID is %d",tiledID);
     if(tiledID==0)
     {
         return true;
@@ -597,12 +591,8 @@ bool Hero::couldgo(int direction)
 
 void Hero::couldbulletgo()
 {
-    
-    log("1");
     Point pos=positiontrans(bullet->getPosition());
-    log("12");
     int tiledID =  map->getLayer("move")-> getTileGIDAt(pos);
-    log("bulletID is %d",tiledID);
     if(tiledID)
     {
         bulletinwall=1;
@@ -611,7 +601,6 @@ void Hero::couldbulletgo()
         {
             
             isbullet=0;
-            log("333");
             bullet->setVisible(false); bullet->setPosition(Director::getInstance()->getVisibleSize().width/2,Director::getInstance()->getVisibleSize().height/2);
             isbullet=0;
             bulletinwall=0;
@@ -625,7 +614,6 @@ void Hero::couldbulletgo()
 
 void Hero::enemycoming()
 {
-    log("111");
     enemy= Sprite::createWithSpriteFrameName("1001.png");
     addChild(enemy,2);
     enemy->setPosition(1000,1000);
@@ -635,8 +623,8 @@ void Hero::enemycoming()
     enemy_pProgressView = new ProgressView();
     enemy_pProgressView->setScale(1,0.5);
     enemy_pProgressView->setPosition(enemy_x+330,enemy_y+450);
-    enemy_pProgressView->setBackgroundTexture("noblood.png");
-    enemy_pProgressView->setForegroundTexture("fullblood.png");
+    enemy_pProgressView->setBackgroundTexture("item/noblood.png");
+    enemy_pProgressView->setForegroundTexture("item/fullblood.png");
     enemy_pProgressView->setTotalProgress(100.0f);
     enemy_pProgressView->setCurrentProgress(100.0f);
     enemy -> addChild(enemy_pProgressView,5);
@@ -644,7 +632,8 @@ void Hero::enemycoming()
 
 void Hero::enemymove()
 {
-    int i = random(1, 4);
+    getenemydirection(1);
+    int i = enemydirection;
     for(;;)
     {
         if(canenemygo(i))
@@ -660,7 +649,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation1 = Animation::createWithSpriteFrames(enemy_animFrames1, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation1))); //测试动画
-            auto moveby=MoveBy::create(1,Point(0,-30));
+            auto moveby=MoveBy::create(1,Point(0,-60));
             enemy->runAction(moveby);
             break;
         }
@@ -669,7 +658,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation2 = Animation::createWithSpriteFrames(enemy_animFrames2, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation2))); //测试动画
-            auto moveby=MoveBy::create(1,Point(0,30));
+            auto moveby=MoveBy::create(1,Point(0,60));
             enemy->runAction(moveby);
             break;
         }
@@ -678,7 +667,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation3 = Animation::createWithSpriteFrames(enemy_animFrames3, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation3))); //测试动画
-            auto moveby=MoveBy::create(1,Point(-30,0));
+            auto moveby=MoveBy::create(1,Point(-60,0));
             enemy->runAction(moveby);
             break;
         }
@@ -687,7 +676,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation4 = Animation::createWithSpriteFrames(enemy_animFrames4, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation4))); //测试动画
-            auto moveby=MoveBy::create(1,Point(30,0));
+            auto moveby=MoveBy::create(1,Point(60,0));
             enemy->runAction(moveby);
             break;
         }
@@ -701,19 +690,19 @@ bool Hero::canenemygo(int direction)
     Point enemytemp=Point(0,0);
     if(direction==1)
     {
-        temp=Point(3,3);
+        temp=Point(6,3);
     }
     if(direction==2)
     {
-        temp=Point(3,-3);
+        temp=Point(6,-3);
     }
     if(direction==3)
     {
-        temp=Point(-3,0);
+        temp=Point(-6,0);
     }
     if(direction==4)
     {
-        temp=Point(4,0);
+        temp=Point(7,0);
     }
     auto maplayer = map->getLayer("move");
     Point pos=positiontrans(enemy->getPosition());
@@ -793,10 +782,790 @@ void Hero::gotodie(int who)
         {
             enemy->setVisible(true);
         };
+        auto callbackfunc3 = [=]()
+        {
+            enemy->setPosition(50,50);
+            enemy->removeFromParent();
+            bullet2->setVisible(false);
+            enemylive = 0;
+        };
         enemy->stopAllActions();
         auto callFunc1=CallFunc::create(callbackfunc1);
         auto callFunc2=CallFunc::create(callbackfunc2);
-        auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,NULL);
+        auto callFunc3=CallFunc::create(callbackfunc3);
+        auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,callFunc3,NULL);
         enemy->runAction(actions);
+    }
+}
+
+
+void Hero::getenemydirection(int enemycode)
+{
+    if(enemycode==1)
+    {
+        if((enemy_x-hero_x)>=0)
+        {
+            if((enemy_y-hero_y)>=0)
+            {
+                if((enemy_y-hero_y)>=(enemy_x-hero_x))
+                {
+                    enemydirection=1;
+                }
+                else
+                {
+                    enemydirection=3;
+                }
+            }
+            if((enemy_y-hero_y)<0)
+            {
+                if((hero_y-enemy_y)>=(enemy_x-hero_x))
+                {
+                    enemydirection=2;
+                }
+                else
+                {
+                    enemydirection=3;
+                }
+            }
+        }
+        if((enemy_x-hero_x)<0)
+        {
+            if((enemy_y-hero_y)>0)
+            {
+                if((hero_x-enemy_x)>=(enemy_y-hero_y))
+                {
+                    enemydirection=4;
+                }
+                else
+                {
+                    enemydirection=1;
+                }
+            }
+            if((enemy_y-hero_y)<0)
+            {
+                if((hero_x-enemy_x)>=(hero_y-enemy_y))
+                {
+                    enemydirection=4;
+                }
+                else
+                {
+                    enemydirection=2;
+                }
+            }
+        }
+    }
+}
+
+
+
+void Hero::enemyattack()
+{
+    bullet2->setVisible(true);
+    float deltx,delty;
+    deltx = enemy_x - hero_x;
+    delty = enemy_y - hero_y;
+    float delta = sqrt(deltx*deltx + delty*delty);
+    float ex = deltx/delta;
+    float ey = delty/delta;
+    int n = 300;//shecheng
+    bullet2->setPosition(enemy_x, enemy_y);
+    bullet2->setVisible(true);
+    bullet2inair=1;
+    auto fire = MoveBy::create(0.3,Vec2(-n*ex,-n*ey));
+    auto callbackfunc = [=]()
+    {
+        bullet->setVisible(false); bullet2->setPosition(50,50);
+        bullet2inair=0;
+    };
+    auto callFunc=CallFunc::create(callbackfunc);
+    auto actions = Sequence::create(fire,DelayTime::create(0.3),callFunc,NULL);
+    bullet2->runAction(actions);
+}
+
+
+
+void Hero::itemtimecoming()
+{
+    for(int i=1;i<11;i++)
+    {
+        if(isitemlive[i]==0)
+        {
+            if(i==1)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item1 = Sprite::create("item/shoes.png");
+                    item1->setPosition(pos);
+                    addChild(item1,5);
+                    item1->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item1 = Sprite::create("item/healthpotion.png");
+                    item1->setPosition(pos);
+                    addChild(item1,5);
+                    item1->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item1 = Sprite::create("item/attackboost.png");
+                    item1->setPosition(pos);
+                    addChild(item1,5);
+                    item1->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==2)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item2 = Sprite::create("item/shoes.png");
+                    item2->setPosition(pos);
+                    addChild(item2,5);
+                    item2->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item2 = Sprite::create("item/healthpotion.png");
+                    item2->setPosition(pos);
+                    addChild(item2,5);
+                    item2->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item2 = Sprite::create("item/attackboost.png");
+                    item2->setPosition(pos);
+                    addChild(item2,5);
+                    item2->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==3)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item3 = Sprite::create("item/shoes.png");
+                    item3->setPosition(pos);
+                    addChild(item3,5);
+                    item3->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item3 = Sprite::create("item/healthpotion.png");
+                    item3->setPosition(pos);
+                    addChild(item3,5);
+                    item3->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item3 = Sprite::create("item/attackboost.png");
+                    item3->setPosition(pos);
+                    addChild(item3,5);
+                    item3->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==4)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item4 = Sprite::create("item/shoes.png");
+                    item4->setPosition(pos);
+                    addChild(item4,5);
+                    item4->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item4 = Sprite::create("item/healthpotion.png");
+                    item4->setPosition(pos);
+                    addChild(item4,5);
+                    item4->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item4 = Sprite::create("item/attackboost.png");
+                    item4->setPosition(pos);
+                    addChild(item4,5);
+                    item4->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==5)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item5 = Sprite::create("item/shoes.png");
+                    item5->setPosition(pos);
+                    addChild(item5,5);
+                    item5->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item5 = Sprite::create("item/healthpotion.png");
+                    item5->setPosition(pos);
+                    addChild(item5,5);
+                    item5->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item5 = Sprite::create("item/attackboost.png");
+                    item5->setPosition(pos);
+                    addChild(item5,5);
+                    item5->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==6)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item6 = Sprite::create("item/shoes.png");
+                    item6->setPosition(pos);
+                    addChild(item6,5);
+                    item6->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item6 = Sprite::create("item/healthpotion.png");
+                    item6->setPosition(pos);
+                    addChild(item6,5);
+                    item6->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item6 = Sprite::create("item/attackboost.png");
+                    item6->setPosition(pos);
+                    addChild(item6,5);
+                    item6->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==7)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item7 = Sprite::create("item/shoes.png");
+                    item7->setPosition(pos);
+                    addChild(item7,5);
+                    item7->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item7 = Sprite::create("item/healthpotion.png");
+                    item7->setPosition(pos);
+                    addChild(item7,5);
+                    item7->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item7 = Sprite::create("item/attackboost.png");
+                    item7->setPosition(pos);
+                    addChild(item7,5);
+                    item7->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==8)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item8 = Sprite::create("item/shoes.png");
+                    item8->setPosition(pos);
+                    addChild(item8,5);
+                    item8->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item8 = Sprite::create("item/healthpotion.png");
+                    item8->setPosition(pos);
+                    addChild(item8,5);
+                    item8->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item8 = Sprite::create("item/attackboost.png");
+                    item8->setPosition(pos);
+                    addChild(item8,5);
+                    item8->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==9)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item9 = Sprite::create("item/shoes.png");
+                    item9->setPosition(pos);
+                    addChild(item9,5);
+                    item9->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item9 = Sprite::create("item/healthpotion.png");
+                    item9->setPosition(pos);
+                    addChild(item9,5);
+                    item9->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item9 = Sprite::create("item/attackboost.png");
+                    item9->setPosition(pos);
+                    addChild(item9,5);
+                    item9->setScale(0.5,0.5);
+                }
+                break;
+            }
+            if(i==10)
+            {
+                auto pos = getitemcreatpos();
+                int ran = random(1, 10);
+                log(" %d  is    %f   %f",i,pos.x,pos.y);
+                if(ran<4)
+                {
+                    isitemlive[i]=1;
+                    item10 = Sprite::create("item/shoes.png");
+                    item10->setPosition(pos);
+                    addChild(item10,5);
+                    item10->setScale(0.5,0.5);
+                }
+                else if(ran<7)
+                {
+                    isitemlive[i]=2;
+                    item10 = Sprite::create("item/healthpotion.png");
+                    item10->setPosition(pos);
+                    addChild(item10,5);
+                    item10->setScale(0.2,0.2);
+                }
+                else if(ran<11)
+                {
+                    isitemlive[i]=3;
+                    item10 = Sprite::create("item/attackboost.png");
+                    item10->setPosition(pos);
+                    addChild(item10,5);
+                    item10->setScale(0.5,0.5);
+                }
+                break;
+            }
+        }
+    }
+}
+
+
+
+Point Hero::getitemcreatpos()
+{
+    float x=0,y=0;
+    for(;;)
+    {
+        x=random(350 , 3500);
+        y=random(350 , 2500);
+        Point pos=positiontrans(Point(x+30,y+30));
+        if(  !(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x+1,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y+1)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x-1,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y-1)))
+           )
+        {
+            break;
+        }
+    }
+    return Point(x,y);
+}
+
+
+void Hero::itempop()
+{
+    for(int i=1;i<11;i++)
+    {
+        if(isitemlive[i])
+        {
+            if(i==1)
+            {
+                if( ( ( hero_x < item1->getPosition().x+50 ) && ( hero_x+90 > item1->getPosition().x+50 )
+                   && ( hero_y < item1->getPosition().y+35 ) && ( hero_y+90 > item1->getPosition().y+35 )
+                   ) )
+                {
+                    item1->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==2)
+            {
+                if(( hero_x < item2->getPosition().x+50 ) && ( hero_x+90 > item2->getPosition().x+50 )
+                   && ( hero_y < item2->getPosition().y+35 ) && ( hero_y+90 > item2->getPosition().y+35 )
+                   )
+                {
+                    item2->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==3)
+            {
+                if(( hero_x < item3->getPosition().x+50 ) && ( hero_x+90 > item3->getPosition().x+50 )
+                   && ( hero_y < item3->getPosition().y+35 ) && ( hero_y+90 > item3->getPosition().y+35 )
+                   )
+                {
+                    item3->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==4)
+            {
+                if(( hero_x < item4->getPosition().x+50 ) && ( hero_x+90 > item4->getPosition().x+50 )
+                   && ( hero_y < item4->getPosition().y+35 ) && ( hero_y+90 > item4->getPosition().y+35 )
+                   )
+                {
+                    item4->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==5)
+            {
+                if(( hero_x < item5->getPosition().x+50 ) && ( hero_x+90 > item5->getPosition().x+50 )
+                   && ( hero_y < item5->getPosition().y+35 ) && ( hero_y+90 > item5->getPosition().y+35 )
+                   )
+                {
+                    item5->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==6)
+            {
+                if(( hero_x < item6->getPosition().x+50 ) && ( hero_x+90 > item6->getPosition().x+50 )
+                   && ( hero_y < item6->getPosition().y+35 ) && ( hero_y+90 > item6->getPosition().y+35 )
+                   )
+                {
+                    item6->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==7)
+            {
+                if(( hero_x < item7->getPosition().x+50 ) && ( hero_x+90 > item7->getPosition().x+50 )
+                   && ( hero_y < item7->getPosition().y+35 ) && ( hero_y+90 > item7->getPosition().y+35 )
+                   )
+                {
+                    item7->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==8)
+            {
+                if(( hero_x < item8->getPosition().x+50 ) && ( hero_x+90 > item8->getPosition().x+50 )
+                   && ( hero_y < item8->getPosition().y+35 ) && ( hero_y+90 > item8->getPosition().y+35 )
+                   )
+                {
+                    item8->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==9)
+            {
+                if(( hero_x < item9->getPosition().x+50 ) && ( hero_x+90 > item9->getPosition().x+50 )
+                   && ( hero_y < item9->getPosition().y+35 ) && ( hero_y+90 > item9->getPosition().y+35 )
+                   )
+                {
+                    item9->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+            if(i==10)
+            {
+                if(( hero_x < item10->getPosition().x+50 ) && ( hero_x+90 > item10->getPosition().x+50 )
+                   && ( hero_y < item10->getPosition().y+35 ) && ( hero_y+90 > item10->getPosition().y+35 )
+                   )
+                {
+                    item10->removeFromParent();
+                    if(isitemlive[i]==1&&hero_speed<=10)
+                    {
+                        hero_speed+=0.5;
+                    }
+                    if(isitemlive[i]==2&&hero_blood<100)
+                    {
+                        int n=100-hero_blood;
+                        if(n>30)
+                        {
+                            n = 30;
+                        }
+                        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()+n);
+                        hero_blood+=n;
+                    }
+                    if(isitemlive[i]==3)
+                    {
+                        hero_shecheng+=30;
+                    }
+                    isitemlive[i]=0;
+                }
+            }
+        }
+    }
+}
+
+
+
+void Hero::enemyforup()
+{
+    if(time==enemytime&&!enemylive)
+    {
+        enemycoming();
+        enemytime+=1800;
+    }
+    if(enemylive)
+    {
+        enemy_x = enemy->getPositionX();
+        enemy_y = enemy->getPositionY();
+        if(time==enemymovetime)
+        {
+            enemymove();
+            enemymovetime+=60;
+        }
+        if(time==enemyacktime)
+        {
+            enemyattack();
+            enemyacktime+=100;
+        }
+    }
+    if( (bullet2inair) &&(!bullet2inwall) )
+    {
+        void couldbullet2go();
+    }
+}
+
+
+void Hero::couldbullet2go()
+{
+    Point pos=positiontrans(bullet->getPosition());
+    int tiledID =  map->getLayer("move")-> getTileGIDAt(pos);
+    if(tiledID)
+    {
+        bullet2inwall=1;
+        bullet->stopAllActions();
+        auto callbackfunc = [=]()
+        {
+            
+            bullet2inair=0;
+            bullet->setVisible(false); bullet->setPosition(50,50);
+            bullet2inwall=0;
+        };
+        auto callFunc=CallFunc::create(callbackfunc);
+        auto actions = Sequence::create(DelayTime::create(0.3),callFunc,NULL);
+        bullet->runAction(actions);
     }
 }
