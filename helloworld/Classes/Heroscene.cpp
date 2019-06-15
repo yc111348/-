@@ -7,7 +7,7 @@
 
 #include "Heroscene.hpp"
 #include "SimpleAudioEngine.h"
-
+#include "LoginScene.hpp"
 
 USING_NS_CC;
 bool Hero::isKeyPressed(EventKeyboard::KeyCode keyCode)
@@ -299,8 +299,7 @@ bool Hero::init()
     };
     
     
-    //实时积分
-    
+    //-------------------实时积分------------------//
     ranklist = Label::createWithTTF("积分:", "fonts/chicken.ttf", 40);
     ranklist -> setColor(Color3B(255,69,0));
     addChild(ranklist,10);
@@ -308,6 +307,15 @@ bool Hero::init()
     scorettf = Label::createWithTTF("0", "fonts/chicken.ttf", 40);
     scorettf -> setColor(Color3B(255,69,0));
     addChild(scorettf,10);
+    //-------------------结  束-------------------//
+    
+    //-------------------死亡文字------------------//
+    deadttf = Label::createWithTTF("游戏结束!", "fonts/chicken.ttf", 70);
+    deadttf -> setColor(Color3B(255,69,0));
+    deadttf -> setVisible(false);
+    addChild(deadttf,10);
+    
+    //-------------------结   束------------------//
     
     
     return true;
@@ -411,6 +419,27 @@ void Hero::update(float delta)
     scorettf -> setPosition(-viewpos.x+200,-viewpos.y+700);
     scorettf -> setString(__String::createWithFormat("%i",score)->getCString());
     //----------结     束-------------//
+    //----------死亡  文字-------------//
+    deadttf -> setPosition(-viewpos.x+500, -viewpos.y+400);
+    if(ifendgame == 1)
+    {
+        auto * listenerEndGame = EventListenerTouchOneByOne::create();
+        listenerEndGame->onTouchBegan = [this](Touch * touch,Event * event)
+        {
+          
+        Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, LoginScene::createScene()));
+            
+            return false;
+        };
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerEndGame,this);
+    }
+    //----------结     束-------------//
+    
+    
+    
+    
+    
+    
 }
 
 void Hero::keyPressedDuration(EventKeyboard::KeyCode code)
@@ -455,7 +484,7 @@ void Hero::keyPressedDuration(EventKeyboard::KeyCode code)
 }
 bool Hero::touch(Touch * touch,Event *event)
 {
-    if(isbullet==0)
+    if(isbullet==0 && !ifendgame)
     {
         auto visiblesize = Director::getInstance()->getVisibleSize();
         Point pt = touch->getLocation();
@@ -787,7 +816,32 @@ void Hero::gotodie(int who)
 {
     if(who==1)
     {
-        log("haha  ,  han han");
+        ifendgame = 1;
+        this -> unscheduleUpdate();
+        auto callbackfunc1 = [=]()
+        {
+            deadttf -> setVisible(true);
+        };
+        auto callbackfunc2 = [=]()
+        {
+            deadttf -> setVisible(false);
+        };
+        hero->stopAllActions();
+        auto callFunc1=CallFunc::create(callbackfunc1);
+        auto callFunc2=CallFunc::create(callbackfunc2);
+        auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,NULL);
+        deadttf->runAction(actions);
+        auto * listenerEndGame = EventListenerTouchOneByOne::create();
+        listenerEndGame->onTouchBegan = [this](Touch * touch,Event * event)
+        {
+            if(this->getBoundingBox().containsPoint(touch->getLocation()))
+            {
+                Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, LoginScene::createScene()));
+            }
+            
+            return false;
+        };
+        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerEndGame,this);
     }
     if(who==2)
     {
@@ -884,11 +938,11 @@ void Hero::enemyattack()
     float delta = sqrt(deltx*deltx + delty*delty);
     float ex = deltx/delta;
     float ey = delty/delta;
-    int n = 500;//shecheng
+    int n = 300;//shecheng
     bullet2->setPosition(enemy_x, enemy_y);
     bullet2->setVisible(true);
     bullet2inair=1;
-    auto fire = MoveBy::create(0.15,Vec2(-n*ex,-n*ey));
+    auto fire = MoveBy::create(0.3,Vec2(-n*ex,-n*ey));
     auto callbackfunc = [=]()
     {
         bullet->setVisible(false); bullet2->setPosition(50,50);

@@ -122,6 +122,10 @@ public:
     //结束
     
     
+    //----------死亡界面----------//
+    cocos2d::Label * deadttf;
+    bool ifendgame = 0;
+    
 protected:
     //-----------积分榜----------//
     cocos2d::Label * ranklist;
