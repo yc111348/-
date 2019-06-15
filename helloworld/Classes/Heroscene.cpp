@@ -880,11 +880,11 @@ void Hero::enemyattack()
     float delta = sqrt(deltx*deltx + delty*delty);
     float ex = deltx/delta;
     float ey = delty/delta;
-    int n = 300;//shecheng
+    int n = 500;//shecheng
     bullet2->setPosition(enemy_x, enemy_y);
     bullet2->setVisible(true);
     bullet2inair=1;
-    auto fire = MoveBy::create(0.3,Vec2(-n*ex,-n*ey));
+    auto fire = MoveBy::create(0.15,Vec2(-n*ex,-n*ey));
     auto callbackfunc = [=]()
     {
         bullet->setVisible(false); bullet2->setPosition(50,50);
