@@ -76,7 +76,7 @@ void HelloWorld::initUI()
     
     
     //游戏标题
-    auto label = Label::createWithTTF("弓箭手大作战", "fonts/chicken.ttf", 68);
+    auto label = Label::createWithTTF("崩坏大作战", "fonts/chicken.ttf", 88);
     if (label == nullptr)
     {
         problemLoading("'fonts/chicken.ttf'");
