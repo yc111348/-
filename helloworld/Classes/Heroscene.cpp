@@ -427,7 +427,7 @@ void Hero::update(float delta)
         listenerEndGame->onTouchBegan = [this](Touch * touch,Event * event)
         {
           
-        Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, LoginScene::createScene()));
+             Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, LoginScene::createScene()));
             
             return false;
         };
@@ -580,7 +580,7 @@ bool Hero::couldgo(int direction)
     }
     if(direction==3)
     {
-        temp=Point(-1,0);
+        temp=Point(0,0);
     }
     if(direction==4)
     {
@@ -636,6 +636,18 @@ void Hero::enemycoming()
     enemy->runAction(RepeatForever::create(Animate::create(enemy_animation1))); //测试动画
     enemylive=1;
     enemyblood=100;
+    if(enemy_speed<=100)
+    {
+        enemy_speed+=10;
+    }
+    if(enemy_shesu>=50)
+    {
+        enemy_shesu-=10;
+    }
+    if(enemy_gongjili<=50)
+    {
+        enemy_gongjili+=10;
+    }
     enemy_x = enemy->getPositionX();
     enemy_y=enemy->getPositionY();
     enemy_pProgressView = new ProgressView();
@@ -667,7 +679,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation1 = Animation::createWithSpriteFrames(enemy_animFrames1, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation1))); //测试动画
-            auto moveby=MoveBy::create(1,Point(0,-60));
+            auto moveby=MoveBy::create(1,Point(0,-enemy_speed));
             enemy->runAction(moveby);
             break;
         }
@@ -676,7 +688,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation2 = Animation::createWithSpriteFrames(enemy_animFrames2, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation2))); //测试动画
-            auto moveby=MoveBy::create(1,Point(0,60));
+            auto moveby=MoveBy::create(1,Point(0,enemy_speed));
             enemy->runAction(moveby);
             break;
         }
@@ -685,7 +697,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation3 = Animation::createWithSpriteFrames(enemy_animFrames3, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation3))); //测试动画
-            auto moveby=MoveBy::create(1,Point(-60,0));
+            auto moveby=MoveBy::create(1,Point(-enemy_speed,0));
             enemy->runAction(moveby);
             break;
         }
@@ -694,7 +706,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation4 = Animation::createWithSpriteFrames(enemy_animFrames4, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation4))); //测试动画
-            auto moveby=MoveBy::create(1,Point(60,0));
+            auto moveby=MoveBy::create(1,Point(enemy_speed,0));
             enemy->runAction(moveby);
             break;
         }
@@ -816,7 +828,6 @@ void Hero::gotodie(int who)
 {
     if(who==1)
     {
-        ifendgame = 1;
         this -> unscheduleUpdate();
         auto callbackfunc1 = [=]()
         {
@@ -826,10 +837,16 @@ void Hero::gotodie(int who)
         {
             deadttf -> setVisible(false);
         };
+        auto callbackfunc3 = [=]()
+        {
+            ifendgame = 1;
+        };
+        
         hero->stopAllActions();
+        auto callfunc3=CallFunc::create(callbackfunc3);
         auto callFunc1=CallFunc::create(callbackfunc1);
         auto callFunc2=CallFunc::create(callbackfunc2);
-        auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,NULL);
+        auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,callfunc3,NULL);
         deadttf->runAction(actions);
         auto * listenerEndGame = EventListenerTouchOneByOne::create();
         listenerEndGame->onTouchBegan = [this](Touch * touch,Event * event)
@@ -866,6 +883,7 @@ void Hero::gotodie(int who)
         auto callFunc3=CallFunc::create(callbackfunc3);
         auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,callFunc3,NULL);
         enemy->runAction(actions);
+        enemytime = time + 300;
     }
 }
 
@@ -1598,7 +1616,6 @@ void Hero::enemyforup()
         enemycoming();
         enemymovetime=enemytime;
         enemyacktime=enemytime;
-        enemytime+=1200;
     }
     if(enemylive)
     {
@@ -1612,7 +1629,7 @@ void Hero::enemyforup()
         if(time==enemyacktime)
         {
             enemyattack();
-            enemyacktime+=100;
+            enemyacktime+=enemy_shesu;
         }
     }
     if( (bullet2inair) &&(!bullet2inwall) )

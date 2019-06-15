@@ -88,6 +88,9 @@ public:
     void getenemydirection(int enemycode);
     void getlenth(int direction);
     void enemyattack();
+    int enemy_speed = 50 ;
+    int enemy_shesu = 110;
+    int enemy_gongjili=0;
     
     void enemyforup();
     
