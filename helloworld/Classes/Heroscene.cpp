@@ -40,7 +40,6 @@ bool Hero::init()
     {
         return false;
     }
-    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
@@ -97,6 +96,7 @@ bool Hero::init()
     // add a label shows "Hello World"
     // create and initialize a label
     
+    int heronum = UserDefault::getInstance()->getIntegerForKey("hero");  //
     
     //1.读取素材文件
     SpriteFrameCache* cache3 = SpriteFrameCache::getInstance();
@@ -124,67 +124,164 @@ bool Hero::init()
     SpriteFrameCache* enemy_cache4 = SpriteFrameCache::getInstance();
     cache4->addSpriteFramesWithFile("A monster/monsterwalkright.plist"); //从plist中加载图片信息
     
+    
+    //角色2的素材
+    
+    SpriteFrameCache* cache7 = SpriteFrameCache::getInstance();
+    cache7->addSpriteFramesWithFile("hero2/walkleft2.plist"); //从plist中加载图片信息
+    SpriteFrameCache* cache6 = SpriteFrameCache::getInstance();
+    cache6->addSpriteFramesWithFile("hero2/walkback2.plist"); //从plist中加载图片信息
+    SpriteFrameCache* cache5 = SpriteFrameCache::getInstance();
+    cache5->addSpriteFramesWithFile("hero2/walkfront2.plist"); //从plist中加载图片信息
+    SpriteFrameCache* cache8 = SpriteFrameCache::getInstance();
+    cache8->addSpriteFramesWithFile("hero2/walkright2.plist"); //从plist中加载图片信息
+    
+    SpriteFrameCache* s_cache7 = SpriteFrameCache::getInstance();
+    s_cache7->addSpriteFramesWithFile("hero2/standleft2.plist"); //从plist中加载图片信息
+    SpriteFrameCache* s_cache6 = SpriteFrameCache::getInstance();
+    s_cache6->addSpriteFramesWithFile("hero2/standback2.plist"); //从plist中加载图片信息
+    SpriteFrameCache* s_cache5 = SpriteFrameCache::getInstance();
+    s_cache5->addSpriteFramesWithFile("hero2/standfront2.plist"); //从plist中加载图片信息
+    SpriteFrameCache* s_cache8 = SpriteFrameCache::getInstance();
+    s_cache8->addSpriteFramesWithFile("hero2/standright2.plist"); //从plist中加载图片信息
+    //结束
+    
+    
     //2.创建逐帧数组
     //front
-    char str1[100] = {0};
-    for (int i = 1231; i<1240; i++)
+    if(heronum==1)
     {
-        sprintf(str1, "%d.png", i);
-        SpriteFrame* pFrame1 = cache1->getSpriteFrameByName(str1);
-        animFrames1.pushBack(pFrame1);
+        char str1[100] = {0};
+        for (int i = 1231; i<1240; i++)
+        {
+            sprintf(str1, "%d.png", i);
+            SpriteFrame* pFrame1 = cache1->getSpriteFrameByName(str1);
+            animFrames1.pushBack(pFrame1);
+        }
+        //back
+        char str2[100] = {0};
+        for (int i = 1131; i<1140; i++)
+        {
+            sprintf(str2, "%d.png", i);
+            SpriteFrame* pFrame2 = cache2->getSpriteFrameByName(str2);
+            animFrames2.pushBack(pFrame2);
+        }
+        //left
+        char str3[100] = {0};
+        for (int i = 1331; i<1340; i++)
+        {
+            sprintf(str3, "%d.png", i);
+            SpriteFrame* pFrame3 = cache3->getSpriteFrameByName(str3);
+            animFrames3.pushBack(pFrame3);
+        }
+        //right
+        char str4[100] = {0};
+        for (int i = 1431; i<1440; i++)
+        {
+            sprintf(str4, "%d.png", i);
+            SpriteFrame* pFrame4 = cache4->getSpriteFrameByName(str4);
+            animFrames4.pushBack(pFrame4);
+        }
+        char s_str1[100] = {0};
+        for (int i = 1211; i<1219; i++)
+        {
+            sprintf(s_str1, "%d.png", i);
+            SpriteFrame* s_pFrame1 = s_cache1->getSpriteFrameByName(s_str1);
+            s_animFrames1.pushBack(s_pFrame1);
+        }
+        
+        char s_str2[100] = {0};
+        for (int i = 1111; i<1119; i++)
+        {
+            sprintf(s_str2, "%d.png", i);
+            SpriteFrame* s_pFrame2 = s_cache2->getSpriteFrameByName(s_str2);
+            s_animFrames2.pushBack(s_pFrame2);
+        }
+        char s_str3[100] = {0};
+        for (int i = 1311; i<1319; i++)
+        {
+            sprintf(s_str3, "%d.png", i);
+            SpriteFrame* s_pFrame3 = s_cache3->getSpriteFrameByName(s_str3);
+            s_animFrames3.pushBack(s_pFrame3);
+        }
+        char s_str4[100] = {0};
+        for (int i = 1411; i<1419; i++)
+        {
+            sprintf(s_str4, "%d.png", i);
+            SpriteFrame* s_pFrame4 = s_cache4->getSpriteFrameByName(s_str4);
+            s_animFrames4.pushBack(s_pFrame4);
+        }
     }
-    //back
-    char str2[100] = {0};
-    for (int i = 1131; i<1140; i++)
+    if(heronum==2)
     {
-        sprintf(str2, "%d.png", i);
-        SpriteFrame* pFrame2 = cache2->getSpriteFrameByName(str2);
-        animFrames2.pushBack(pFrame2);
-    }
-    //left
-    char str3[100] = {0};
-    for (int i = 1331; i<1340; i++)
-    {
-        sprintf(str3, "%d.png", i);
-        SpriteFrame* pFrame3 = cache3->getSpriteFrameByName(str3);
-        animFrames3.pushBack(pFrame3);
-    }
-    //right
-    char str4[100] = {0};
-    for (int i = 1431; i<1440; i++)
-    {
-        sprintf(str4, "%d.png", i);
-        SpriteFrame* pFrame4 = cache4->getSpriteFrameByName(str4);
-        animFrames4.pushBack(pFrame4);
-    }
-    char s_str1[100] = {0};
-    for (int i = 1211; i<1219; i++)
-    {
-        sprintf(s_str1, "%d.png", i);
-        SpriteFrame* s_pFrame1 = s_cache1->getSpriteFrameByName(s_str1);
-        s_animFrames1.pushBack(s_pFrame1);
-    }
-    
-    char s_str2[100] = {0};
-    for (int i = 1111; i<1119; i++)
-    {
-        sprintf(s_str2, "%d.png", i);
-        SpriteFrame* s_pFrame2 = s_cache2->getSpriteFrameByName(s_str2);
-        s_animFrames2.pushBack(s_pFrame2);
-    }
-    char s_str3[100] = {0};
-    for (int i = 1311; i<1319; i++)
-    {
-        sprintf(s_str3, "%d.png", i);
-        SpriteFrame* s_pFrame3 = cache3->getSpriteFrameByName(s_str3);
-        s_animFrames3.pushBack(s_pFrame3);
-    }
-    char s_str4[100] = {0};
-    for (int i = 1411; i<1419; i++)
-    {
-        sprintf(s_str4, "%d.png", i);
-        SpriteFrame* s_pFrame4 = s_cache4->getSpriteFrameByName(s_str4);
-        s_animFrames4.pushBack(s_pFrame4);
+        log("enter1");
+        char str1[100] = {0};
+        for (int i = 2231; i<2240; i++)
+        {
+            sprintf(str1, "%d.png", i);
+            SpriteFrame* pFrame1 = cache5->getSpriteFrameByName(str1);
+            animFrames1.pushBack(pFrame1);
+        }
+        log("enter2");
+        //back
+        char str2[100] = {0};
+        for (int i = 2131; i<2140; i++)
+        {
+            sprintf(str2, "%d.png", i);
+            SpriteFrame* pFrame2 = cache6->getSpriteFrameByName(str2);
+            animFrames2.pushBack(pFrame2);
+        }
+        log("enter3");
+        //left
+        char str3[100] = {0};
+        for (int i = 2331; i<2340; i++)
+        {
+            sprintf(str3, "%d.png", i);
+            SpriteFrame* pFrame3 = cache7->getSpriteFrameByName(str3);
+            animFrames3.pushBack(pFrame3);
+        }
+        log("enter4");
+        //right
+        char str4[100] = {0};
+        for (int i = 2431; i<2440; i++)
+        {
+            sprintf(str4, "%d.png", i);
+            SpriteFrame* pFrame4 = cache8->getSpriteFrameByName(str4);
+            animFrames4.pushBack(pFrame4);
+        }
+        log("enter5");
+        char s_str1[100] = {0};
+        for (int i = 2211; i<2219; i++)
+        {
+            sprintf(s_str1, "%d.png", i);
+            SpriteFrame* s_pFrame1 = s_cache5->getSpriteFrameByName(s_str1);
+            s_animFrames1.pushBack(s_pFrame1);
+        }
+        log("enter6");
+        char s_str2[100] = {0};
+        for (int i = 2111; i<2119; i++)
+        {
+            sprintf(s_str2, "%d.png", i);
+            SpriteFrame* s_pFrame2 = s_cache6->getSpriteFrameByName(s_str2);
+            s_animFrames2.pushBack(s_pFrame2);
+        }
+        log("enter7");
+        char s_str3[100] = {0};
+        for (int i = 2311; i<2319; i++)
+        {
+            sprintf(s_str3, "%d.png", i);
+            SpriteFrame* s_pFrame3 = s_cache7->getSpriteFrameByName(s_str3);
+            s_animFrames3.pushBack(s_pFrame3);
+        }
+        log("enter8");
+        char s_str4[100] = {0};
+        for (int i = 2411; i<2419; i++)
+        {
+            sprintf(s_str4, "%d.png", i);
+            SpriteFrame* s_pFrame4 = s_cache8->getSpriteFrameByName(s_str4);
+            s_animFrames4.pushBack(s_pFrame4);
+        }
+        log("enter9");
     }
     
     char enemy_str1[100] = {0};
@@ -218,7 +315,14 @@ bool Hero::init()
     }
     
     //3.设置起始帧
-    hero = Sprite::createWithSpriteFrameName("1231.png");
+    if(heronum==1)
+    {
+        hero = Sprite::createWithSpriteFrameName("1231.png");
+    }
+    if(heronum==2)
+    {
+        hero = Sprite::createWithSpriteFrameName("2231.png");
+    }
     addChild(hero,2);
     hero->setPosition(500,500);
     auto s_animation1 = Animation::createWithSpriteFrames(s_animFrames1, 0.3);
@@ -431,14 +535,9 @@ void Hero::update(float delta)
             return false;
         };
     Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerEndGame,this);
+        this->unscheduleUpdate();
     }
     //----------结     束-------------//
-    
-    
-    
-    
-    
-    
 }
 
 void Hero::keyPressedDuration(EventKeyboard::KeyCode code)
