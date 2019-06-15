@@ -68,6 +68,20 @@ bool WeaponScene::init()
     BaseMap1 -> addChild(HeavenFire);
     BaseMap2 -> addChild(fifth);
     
+    auto introduce1 = Label::createWithTTF("天火圣裁", "fonts/chicken.ttf", 50);
+    introduce1 -> setPosition(Vec2(size.width/4,size.height*2/3-10));
+    addChild(introduce1,3);
+    auto introduce2 = Label::createWithTTF("5th圣遗物", "fonts/chicken.ttf", 50);
+    introduce2 -> setPosition(Vec2(size.width*3/4,size.height*2/3-10));
+    addChild(introduce2,3);
+    
+    auto introduce3 = Label::createWithTTF("攻速快，射程远", "fonts/chicken.ttf", 24);
+    introduce3 -> setPosition(Vec2(size.width/4,size.height*1/3+60));
+    addChild(introduce3,5);
+    auto introduce4 = Label::createWithTTF("射程近，使人物加速", "fonts/chicken.ttf", 24);
+    introduce4 -> setPosition(Vec2(size.width*3/4,size.height*1/3+60));
+    addChild(introduce4,5);
+
     //选择按钮
     auto selectbutton = ui::Button::create("UIres/selectbutton2.png");
     selectbutton -> cocos2d::Node::setPosition(size.width/4, size.height/3);

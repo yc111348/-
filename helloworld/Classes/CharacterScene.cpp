@@ -109,7 +109,12 @@ bool CharacterScene::init()
         nike2 -> setVisible(true);
     }
     
-    
+    auto introduce1 = Label::createWithTTF("Ashe", "fonts/chicken.ttf", 50);
+    introduce1 -> setPosition(Vec2(size.width/4,size.height*2/3-10));
+    addChild(introduce1,30);
+    auto introduce2 = Label::createWithTTF("Sona", "fonts/chicken.ttf", 50);
+    introduce2 -> setPosition(Vec2(size.width*3/4,size.height*2/3-10));
+    addChild(introduce2,30);
     
     
    // this->scheduleUpdate();

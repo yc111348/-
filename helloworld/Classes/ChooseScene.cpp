@@ -9,6 +9,7 @@
 #include "ChooseScene.hpp"
 #include "HelloWorldScene.h"
 #include "WeaponScene.hpp"
+#include "RankScene.hpp"
 #include "CharacterScene.hpp"
 #include "SingleConnectChoose.hpp"
 #include "cocos2d.h"
@@ -170,6 +171,25 @@ bool ChooseScene::init()
                                           }
 
                                       });
+
+    
+    
+    //跳转排行榜
+    auto rankButton = ui::Button::create("UIres/mid.png");
+    rankButton -> setScale(0.6, 0.6);
+    auto rankttf = Label::createWithTTF("查看排行", "fonts/chicken.ttf", 35);
+    rankttf -> setPosition(size.width*3/4, size.height*6/7);
+    rankButton -> cocos2d::Node::setPosition(Vec2(size.width*3/4,size.height*6/7));
+    addChild(rankttf,4);
+    this -> addChild(rankButton,3);
+    rankButton -> addClickEventListener([this](Ref* ref)
+                                        {
+                                            Director::getInstance()->replaceScene(RankScene::createScene());
+                                        });
+    
+    
+    
+    
 
     
     return true;
