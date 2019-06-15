@@ -761,7 +761,8 @@ void Hero::popgo(int whogodie)
         enemyblood-=10;
         bulletinenemy=1;
         bullet->stopAllActions();
-        enemy_pProgressView->setCurrentProgress(enemy_pProgressView->getCurrentProgress()-10); //更改血量
+        enemy_pProgressView->setCurrentProgress(enemy_pProgressView->getCurrentProgress()-10);//更改血量
+        score += 10;
         auto callbackfunc = [=]()
         {
             
@@ -774,6 +775,7 @@ void Hero::popgo(int whogodie)
         bullet->runAction(actions);
         if(enemyblood<=0)
         {
+            score += 50;
             gotodie(2);
         }
     }
