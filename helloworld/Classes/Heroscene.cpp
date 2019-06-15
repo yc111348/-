@@ -1210,6 +1210,7 @@ void Hero::gotodie(int who)
 {
     if(who==1)
     {
+        UserDefault::getInstance()->setIntegerForKey("score", score);
         auto callbackfunc1 = [=]()
         {
             deadttf -> setVisible(true);
