@@ -7,7 +7,7 @@
 
 #include "Heroscene.hpp"
 #include "SimpleAudioEngine.h"
-#include "LoginScene.hpp"
+#include "EndGameScene.hpp"
 
 USING_NS_CC;
 bool Hero::isKeyPressed(EventKeyboard::KeyCode keyCode)
@@ -41,6 +41,7 @@ bool Hero::init()
         return false;
     }
     
+    auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     map = TMXTiledMap::create("mapres/map.tmx");
@@ -426,7 +427,12 @@ void Hero::update(float delta)
         auto * listenerEndGame = EventListenerTouchOneByOne::create();
         listenerEndGame->onTouchBegan = [this](Touch * touch,Event * event)
         {
+<<<<<<< HEAD
              Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, LoginScene::createScene()));
+=======
+          
+        Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, EndGameScene::createScene()));
+>>>>>>> e1dd5f3ea284e618bd8ce85a6e91877fcd3c25cf
             
             return false;
         };
@@ -634,6 +640,8 @@ void Hero::enemycoming()
     auto enemy_animation1 = Animation::createWithSpriteFrames(enemy_animFrames1, 0.3);
     enemy->runAction(RepeatForever::create(Animate::create(enemy_animation1))); //测试动画
     enemylive=1;
+<<<<<<< HEAD
+=======
     enemyblood=100;
     if(enemy_speed<=100)
     {
@@ -649,6 +657,7 @@ void Hero::enemycoming()
     }
     enemy_x = enemy->getPositionX();
     enemy_y=enemy->getPositionY();
+>>>>>>> 1866716629da54ef516810fb97ca71c0230643f5
     enemy_pProgressView = new ProgressView();
     enemy_pProgressView->setScale(1,0.5);
     enemy_pProgressView->setPosition(330,450);
@@ -847,17 +856,8 @@ void Hero::gotodie(int who)
         auto callFunc2=CallFunc::create(callbackfunc2);
         auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,callfunc3,NULL);
         deadttf->runAction(actions);
-        auto * listenerEndGame = EventListenerTouchOneByOne::create();
-        listenerEndGame->onTouchBegan = [this](Touch * touch,Event * event)
-        {
-            if(this->getBoundingBox().containsPoint(touch->getLocation()))
-            {
-                Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, LoginScene::createScene()));
-            }
-            
-            return false;
-        };
-        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerEndGame,this);
+        
+  
     }
     if(who==2)
     {
@@ -1613,8 +1613,16 @@ void Hero::enemyforup()
     if(time==enemytime&&!enemylive)
     {
         enemycoming();
+<<<<<<< HEAD
+        enemytime+=60000;
+=======
         enemymovetime=enemytime;
         enemyacktime=enemytime;
+<<<<<<< HEAD
+=======
+        enemytime+=1200;
+>>>>>>> 1866716629da54ef516810fb97ca71c0230643f5
+>>>>>>> e1dd5f3ea284e618bd8ce85a6e91877fcd3c25cf
     }
     if(enemylive)
     {

@@ -100,7 +100,16 @@ bool WeaponScene::init()
                                                UserDefault::getInstance()->setIntegerForKey("weapon",2);
                                            });
     
-    
+    int weaponnum = UserDefault::getInstance()->getIntegerForKey("weapon");
+    if(weaponnum == 1)
+    {
+        nike1 -> setVisible(true);
+    }
+    if(weaponnum == 2)
+    {
+        nike2 -> setVisible(true);
+    }
+
     
     
     

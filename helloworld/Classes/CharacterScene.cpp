@@ -99,6 +99,18 @@ bool CharacterScene::init()
                                                UserDefault::getInstance()->setIntegerForKey("hero",2);
                                            });
     
+    int heronum = UserDefault::getInstance()->getIntegerForKey("hero");
+    if(heronum == 1)
+    {
+        nike1 -> setVisible(true);
+    }
+    if(heronum == 2)
+    {
+        nike2 -> setVisible(true);
+    }
+    
+    
+    
     
    // this->scheduleUpdate();
 
