@@ -78,7 +78,7 @@ public:
     float enemy_y;
     cocos2d::Sprite* enemy;
     void enemycoming();
-    int enemytime=0;
+    int enemytime=2;
     int enemylive=0;
     void enemymove();
     int enemymovetime=0;

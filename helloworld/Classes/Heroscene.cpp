@@ -636,9 +636,15 @@ void Hero::enemycoming()
     auto enemy_animation1 = Animation::createWithSpriteFrames(enemy_animFrames1, 0.3);
     enemy->runAction(RepeatForever::create(Animate::create(enemy_animation1))); //测试动画
     enemylive=1;
+<<<<<<< HEAD
+=======
+    enemyblood=100;
+    enemy_x = enemy->getPositionX();
+    enemy_y=enemy->getPositionY();
+>>>>>>> 1866716629da54ef516810fb97ca71c0230643f5
     enemy_pProgressView = new ProgressView();
     enemy_pProgressView->setScale(1,0.5);
-    enemy_pProgressView->setPosition(enemy_x+330,enemy_y+450);
+    enemy_pProgressView->setPosition(330,450);
     enemy_pProgressView->setBackgroundTexture("item/noblood.png");
     enemy_pProgressView->setForegroundTexture("item/fullblood.png");
     enemy_pProgressView->setTotalProgress(100.0f);
@@ -1585,7 +1591,13 @@ void Hero::enemyforup()
     if(time==enemytime&&!enemylive)
     {
         enemycoming();
+<<<<<<< HEAD
         enemytime+=60000;
+=======
+        enemymovetime=enemytime;
+        enemyacktime=enemytime;
+        enemytime+=1200;
+>>>>>>> 1866716629da54ef516810fb97ca71c0230643f5
     }
     if(enemylive)
     {
