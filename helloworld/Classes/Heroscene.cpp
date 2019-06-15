@@ -40,21 +40,42 @@ bool Hero::init()
     {
         return false;
     }
-    auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
     map = TMXTiledMap::create("mapres/map.tmx");
     addChild(map,1);
     auto mapgo = map->getLayer("move");
     mapgo->setVisible(false);
-    bullet = Sprite::create("item/redball.png");
+    weaponnum = UserDefault::getInstance()->getIntegerForKey("weapon");
+    if(weaponnum==1)
+    {
+        bullet = Sprite::create("item/greenball.png");
+    }
+    if(weaponnum==2)
+    {
+        bullet = Sprite::create("item/fireball.png");
+    }
     bullet2 = Sprite::create("item/bullet2.png");
+    bullet3 = Sprite::create("item/bullet4.png");
+    bullet4 = Sprite::create("item/bullet3.png");
     addChild(bullet,4);
     addChild(bullet2,4);
+    addChild(bullet3,4);
+    addChild(bullet4,4);
     bullet->setVisible(false);
     bullet2->setVisible(false);
+    bullet3->setVisible(false);
+    bullet4->setVisible(false);
     bullet->setPosition(50,50);
     bullet2->setPosition(50,50);
+    bullet3->setPosition(50,50);
+    bullet4->setPosition(50,50);
+    bullet3->setScale(0.7,0.7);
+    bullet4->setScale(0.5,0.5);
+    if(weaponnum==2)
+    {
+        bullet->setScale(0.3,0.3);
+    }
     
     //    获取地图属性
     //    auto mapProperties = map->getProperties();
@@ -93,6 +114,25 @@ bool Hero::init()
     //    }
     
     
+    //武器属性
+    if(weaponnum==1)
+    {
+        hero_speed=3;
+        hero_shecheng=250;
+        hero_blood=0;
+    }
+    if(weaponnum==2)
+    {
+        hero_speed=5;
+        hero_shecheng=200;
+        hero_blood=0;
+    }
+    
+    //结束
+    
+    
+    
+    
     // add a label shows "Hello World"
     // create and initialize a label
     
@@ -116,14 +156,25 @@ bool Hero::init()
     SpriteFrameCache* s_cache4 = SpriteFrameCache::getInstance();
     s_cache4->addSpriteFramesWithFile("hero1/standright1.plist"); //从plist中加载图片信息
     SpriteFrameCache* enemy_cache3 = SpriteFrameCache::getInstance();
-    cache3->addSpriteFramesWithFile("A monster/monsterwalkleft.plist"); //从plist中加载图片信息
+    enemy_cache3->addSpriteFramesWithFile("A monster/monsterwalkleft.plist"); //从plist中加载图片信息
     SpriteFrameCache* enemy_cache2 = SpriteFrameCache::getInstance();
-    cache2->addSpriteFramesWithFile("A monster/monsterwalkfront.plist"); //从plist中加载图片信息
+    enemy_cache2->addSpriteFramesWithFile("A monster/monsterwalkfront.plist"); //从plist中加载图片信息
     SpriteFrameCache* enemy_cache1 = SpriteFrameCache::getInstance();
-    cache1->addSpriteFramesWithFile("A monster/monsterwalkback.plist"); //从plist中加载图片信息
+    enemy_cache1->addSpriteFramesWithFile("A monster/monsterwalkback.plist"); //从plist中加载图片信息
     SpriteFrameCache* enemy_cache4 = SpriteFrameCache::getInstance();
-    cache4->addSpriteFramesWithFile("A monster/monsterwalkright.plist"); //从plist中加载图片信息
+    enemy_cache4->addSpriteFramesWithFile("A monster/monsterwalkright.plist"); //从plist中加载图片信息
     
+    
+    //怪物2素材
+    SpriteFrameCache* enemy2_cache3 = SpriteFrameCache::getInstance();
+    enemy2_cache3->addSpriteFramesWithFile("monster2/mon1walkleft.plist"); //从plist中加载图片信息
+    SpriteFrameCache* enemy2_cache2 = SpriteFrameCache::getInstance();
+    enemy2_cache2->addSpriteFramesWithFile("monster2/mon1walkfront.plist"); //从plist中加载图片信息
+    SpriteFrameCache* enemy2_cache1 = SpriteFrameCache::getInstance();
+    enemy2_cache1->addSpriteFramesWithFile("monster2/mon1walkback.plist"); //从plist中加载图片信息
+    SpriteFrameCache* enemy2_cache4 = SpriteFrameCache::getInstance();
+    enemy2_cache4->addSpriteFramesWithFile("monster2/mon1walkright.plist"); //从plist中加载图片信息
+    //结束
     
     //角色2的素材
     
@@ -146,6 +197,17 @@ bool Hero::init()
     s_cache8->addSpriteFramesWithFile("hero2/standright2.plist"); //从plist中加载图片信息
     //结束
     
+    
+    //怪物3素材
+    SpriteFrameCache* enemy3_cache3 = SpriteFrameCache::getInstance();
+    enemy3_cache3->addSpriteFramesWithFile("monster3/mon2walkleft.plist"); //从plist中加载图片信息
+    SpriteFrameCache* enemy3_cache2 = SpriteFrameCache::getInstance();
+    enemy3_cache2->addSpriteFramesWithFile("monster3/mon2walkfront.plist"); //从plist中加载图片信息
+    SpriteFrameCache* enemy3_cache1 = SpriteFrameCache::getInstance();
+    enemy3_cache1->addSpriteFramesWithFile("monster3/mon2walkback.plist"); //从plist中加载图片信息
+    SpriteFrameCache* enemy3_cache4 = SpriteFrameCache::getInstance();
+    enemy3_cache4->addSpriteFramesWithFile("monster3/mon2walkright.plist"); //从plist中加载图片信息
+    //结束
     
     //2.创建逐帧数组
     //front
@@ -189,7 +251,6 @@ bool Hero::init()
             SpriteFrame* s_pFrame1 = s_cache1->getSpriteFrameByName(s_str1);
             s_animFrames1.pushBack(s_pFrame1);
         }
-        
         char s_str2[100] = {0};
         for (int i = 1111; i<1119; i++)
         {
@@ -214,7 +275,6 @@ bool Hero::init()
     }
     if(heronum==2)
     {
-        log("enter1");
         char str1[100] = {0};
         for (int i = 2231; i<2240; i++)
         {
@@ -222,7 +282,6 @@ bool Hero::init()
             SpriteFrame* pFrame1 = cache5->getSpriteFrameByName(str1);
             animFrames1.pushBack(pFrame1);
         }
-        log("enter2");
         //back
         char str2[100] = {0};
         for (int i = 2131; i<2140; i++)
@@ -231,7 +290,6 @@ bool Hero::init()
             SpriteFrame* pFrame2 = cache6->getSpriteFrameByName(str2);
             animFrames2.pushBack(pFrame2);
         }
-        log("enter3");
         //left
         char str3[100] = {0};
         for (int i = 2331; i<2340; i++)
@@ -240,7 +298,6 @@ bool Hero::init()
             SpriteFrame* pFrame3 = cache7->getSpriteFrameByName(str3);
             animFrames3.pushBack(pFrame3);
         }
-        log("enter4");
         //right
         char str4[100] = {0};
         for (int i = 2431; i<2440; i++)
@@ -249,7 +306,6 @@ bool Hero::init()
             SpriteFrame* pFrame4 = cache8->getSpriteFrameByName(str4);
             animFrames4.pushBack(pFrame4);
         }
-        log("enter5");
         char s_str1[100] = {0};
         for (int i = 2211; i<2219; i++)
         {
@@ -257,7 +313,6 @@ bool Hero::init()
             SpriteFrame* s_pFrame1 = s_cache5->getSpriteFrameByName(s_str1);
             s_animFrames1.pushBack(s_pFrame1);
         }
-        log("enter6");
         char s_str2[100] = {0};
         for (int i = 2111; i<2119; i++)
         {
@@ -265,7 +320,6 @@ bool Hero::init()
             SpriteFrame* s_pFrame2 = s_cache6->getSpriteFrameByName(s_str2);
             s_animFrames2.pushBack(s_pFrame2);
         }
-        log("enter7");
         char s_str3[100] = {0};
         for (int i = 2311; i<2319; i++)
         {
@@ -273,7 +327,6 @@ bool Hero::init()
             SpriteFrame* s_pFrame3 = s_cache7->getSpriteFrameByName(s_str3);
             s_animFrames3.pushBack(s_pFrame3);
         }
-        log("enter8");
         char s_str4[100] = {0};
         for (int i = 2411; i<2419; i++)
         {
@@ -281,7 +334,6 @@ bool Hero::init()
             SpriteFrame* s_pFrame4 = s_cache8->getSpriteFrameByName(s_str4);
             s_animFrames4.pushBack(s_pFrame4);
         }
-        log("enter9");
     }
     
     char enemy_str1[100] = {0};
@@ -313,6 +365,91 @@ bool Hero::init()
         SpriteFrame* enemy_pFrame4 = enemy_cache4->getSpriteFrameByName(enemy_str4);
         enemy_animFrames4.pushBack(enemy_pFrame4);
     }
+    
+    
+    
+    //怪物2
+    
+    
+    char enemy2_str1[100] = {0};
+    for (int i = 14001; i<14009; i++)
+    {
+        sprintf(enemy2_str1, "%d.png", i);
+        SpriteFrame* enemy2_pFrame1 = enemy2_cache1->getSpriteFrameByName(enemy2_str1);
+        enemy2_animFrames1.pushBack(enemy2_pFrame1);
+    }
+    
+    char enemy2_str2[100] = {0};
+    for (int i = 11001; i<11009; i++)
+    {
+        sprintf(enemy2_str2, "%d.png", i);
+        SpriteFrame* enemy2_pFrame2 = enemy2_cache2->getSpriteFrameByName(enemy2_str2);
+        enemy2_animFrames2.pushBack(enemy2_pFrame2);
+    }
+    char enemy2_str3[100] = {0};
+    for (int i = 13001; i<13009; i++)
+    {
+        sprintf(enemy2_str3, "%d.png", i);
+        SpriteFrame* enemy2_pFrame3 = enemy2_cache3->getSpriteFrameByName(enemy2_str3);
+        enemy2_animFrames3.pushBack(enemy2_pFrame3);
+    }
+    char enemy2_str4[100] = {0};
+    for (int i = 12001; i<12009; i++)
+    {
+        sprintf(enemy2_str4, "%d.png", i);
+        SpriteFrame* enemy2_pFrame4 = enemy2_cache4->getSpriteFrameByName(enemy2_str4);
+        enemy2_animFrames4.pushBack(enemy2_pFrame4);
+    }
+    
+    
+    
+    
+    //结束
+    
+    
+    
+    //怪物3
+    
+    
+    char enemy3_str1[100] = {0};
+    for (int i = 24001; i<24009; i++)
+    {
+        sprintf(enemy3_str1, "%d.png", i);
+        SpriteFrame* enemy3_pFrame1 = enemy3_cache1->getSpriteFrameByName(enemy3_str1);
+        enemy3_animFrames1.pushBack(enemy3_pFrame1);
+    }
+    
+    char enemy3_str2[100] = {0};
+    for (int i = 21001; i<21009; i++)
+    {
+        sprintf(enemy3_str2, "%d.png", i);
+        SpriteFrame* enemy3_pFrame2 = enemy3_cache2->getSpriteFrameByName(enemy3_str2);
+        enemy3_animFrames2.pushBack(enemy3_pFrame2);
+    }
+    char enemy3_str3[100] = {0};
+    for (int i = 23001; i<23009; i++)
+    {
+        sprintf(enemy3_str3, "%d.png", i);
+        SpriteFrame* enemy3_pFrame3 = enemy3_cache3->getSpriteFrameByName(enemy3_str3);
+        enemy3_animFrames3.pushBack(enemy3_pFrame3);
+    }
+    char enemy3_str4[100] = {0};
+    for (int i = 22001; i<22009; i++)
+    {
+        sprintf(enemy3_str4, "%d.png", i);
+        SpriteFrame* enemy3_pFrame4 = enemy3_cache4->getSpriteFrameByName(enemy3_str4);
+        enemy3_animFrames4.pushBack(enemy3_pFrame4);
+    }
+    
+    
+    
+    
+    //结束
+    
+    
+    
+    
+    
     
     //3.设置起始帧
     if(heronum==1)
@@ -383,9 +520,9 @@ bool Hero::init()
     m_pProgressView->setBackgroundTexture("item/noblood.png");
     m_pProgressView->setForegroundTexture("item/heroblood.png");
     m_pProgressView->setTotalProgress(100.0f);
-    m_pProgressView->setCurrentProgress(50.0f);
+    m_pProgressView->setCurrentProgress(100.0f);
     hero -> addChild(m_pProgressView,1);
-    hero_blood=50;
+    hero_blood=100;
     
     
     
@@ -440,6 +577,8 @@ void Hero::menuCloseCallback(Ref* pSender)
 void Hero::update(float delta)
 {
     enemyforup();
+    enemy2forup();
+    enemy3forup();
     time+=1;
     if( (!bulletinwall)&&(isbullet) )
     {
@@ -510,11 +649,15 @@ void Hero::update(float delta)
     
     popif(1);
     popif(2);
+    popif(3);
+    popif(4);
+    popif(5);
+    popif(6);
     
     if(time==itemtime)
     {
         itemtimecoming();
-        itemtime+=100;
+        itemtime+=300;
     }
     itempop();
     
@@ -608,7 +751,7 @@ bool Hero::touch(Touch * touch,Event *event)
             bullet->setPosition(50,50);
         };
         auto callFunc=CallFunc::create(callbackfunc);
-        auto actions = Sequence::create(fire,DelayTime::create(0.3),callFunc,NULL);
+        auto actions = Sequence::create(fire,DelayTime::create(0.15),callFunc,NULL);
         bullet->runAction(actions);
     }
     return true;
@@ -710,6 +853,7 @@ void Hero::couldbulletgo()
     {
         bulletinwall=1;
         bullet->stopAllActions();
+        bulletinenemy=0;
         auto callbackfunc = [=]()
         {
             
@@ -720,7 +864,7 @@ void Hero::couldbulletgo()
         };
         
         auto callFunc=CallFunc::create(callbackfunc);
-        auto actions = Sequence::create(DelayTime::create(0.3),callFunc,NULL);
+        auto actions = Sequence::create(DelayTime::create(0.15),callFunc,NULL);
         bullet->runAction(actions);
     }
 }
@@ -729,14 +873,14 @@ void Hero::enemycoming()
 {
     enemy= Sprite::createWithSpriteFrameName("1001.png");
     addChild(enemy,2);
-    enemy->setPosition(1000,1000);
+    enemy->setPosition(getenemypos());
     auto enemy_animation1 = Animation::createWithSpriteFrames(enemy_animFrames1, 0.3);
     enemy->runAction(RepeatForever::create(Animate::create(enemy_animation1))); //测试动画
     enemylive=1;
     enemyblood=100;
-    if(enemy_speed<=100)
+    if(enemy_speed<=30)
     {
-        enemy_speed+=10;
+        enemy_speed+=2;
     }
     if(enemy_shesu>=50)
     {
@@ -744,7 +888,11 @@ void Hero::enemycoming()
     }
     if(enemy_gongjili<=50)
     {
-        enemy_gongjili+=10;
+        enemy_gongjili+=5;
+    }
+    if(enemy_shecheng<=600)
+    {
+        enemy_shecheng+=30;
     }
     enemy_x = enemy->getPositionX();
     enemy_y=enemy->getPositionY();
@@ -777,7 +925,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation1 = Animation::createWithSpriteFrames(enemy_animFrames1, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation1))); //测试动画
-            auto moveby=MoveBy::create(1,Point(0,-enemy_speed));
+            auto moveby=MoveBy::create(0.3,Point(0,-enemy_speed));
             enemy->runAction(moveby);
             break;
         }
@@ -786,7 +934,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation2 = Animation::createWithSpriteFrames(enemy_animFrames2, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation2))); //测试动画
-            auto moveby=MoveBy::create(1,Point(0,enemy_speed));
+            auto moveby=MoveBy::create(0.3,Point(0,enemy_speed));
             enemy->runAction(moveby);
             break;
         }
@@ -795,7 +943,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation3 = Animation::createWithSpriteFrames(enemy_animFrames3, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation3))); //测试动画
-            auto moveby=MoveBy::create(1,Point(-enemy_speed,0));
+            auto moveby=MoveBy::create(0.3,Point(-enemy_speed,0));
             enemy->runAction(moveby);
             break;
         }
@@ -804,7 +952,7 @@ void Hero::enemymove()
             enemy->stopAllActions();
             auto enemy_animation4 = Animation::createWithSpriteFrames(enemy_animFrames4, 0.3);
             enemy->runAction(RepeatForever::create(Animate::create(enemy_animation4))); //测试动画
-            auto moveby=MoveBy::create(1,Point(enemy_speed,0));
+            auto moveby=MoveBy::create(0.3,Point(enemy_speed,0));
             enemy->runAction(moveby);
             break;
         }
@@ -818,34 +966,39 @@ bool Hero::canenemygo(int direction)
     Point enemytemp=Point(0,0);
     if(direction==1)
     {
-        temp=Point(6,3);
+        temp=Point(1,1);
     }
     if(direction==2)
     {
-        temp=Point(6,-3);
+        temp=Point(1,-3);
     }
     if(direction==3)
     {
-        temp=Point(-6,0);
+        temp=Point(0,-2);
     }
     if(direction==4)
     {
-        temp=Point(7,0);
+        temp=Point(3,0);
     }
     auto maplayer = map->getLayer("move");
     Point pos=positiontrans(enemy->getPosition());
     int tiledID =  maplayer -> getTileGIDAt(pos+temp);
+    
+//    if(    ( (enemy->getPositionX ()) < (enemy2->getPositionX()   )  )
+//       &&  ( (enemy2->getPositionX()) < (enemy->getPositionX ()+60)  )
+//       &&  ( (enemy->getPositionY()) < (enemy2->getPositionY ()   )  )
+//       &&  ( (enemy2->getPositionY())< (enemy->getPositionY  ()+80)  ) )
+//    {
+//        tiledID = 1 ;
+//    }
+    
     if(tiledID==0)
     {
         return true;
     }
-    if(tiledID!=0)
-    {
-        return false;
-    }
     else
     {
-        return true;
+        return false;
     }
 }
 
@@ -872,6 +1025,46 @@ void Hero::popif(int whobeatwho)
             }
         }
     }
+    if(whobeatwho==3)
+    {
+        if( (!bullet3inhero)&&(bullet3inair) )
+        {
+            if(((hero->getPositionX()-20) < (bullet3->getPositionX())) &&  ( (bullet3->getPositionX())< (hero->getPositionX()+60)  )  &&((hero->getPositionY()) < (bullet3->getPositionY())) &&  ( (bullet3->getPositionY())< (hero->getPositionY()+80)  ) )
+            {
+                popgo(3);
+            }
+        }
+    }
+    if(whobeatwho==4)
+    {
+        if( (!bulletinenemy)&&enemy2live&&isbullet)
+        {
+            if(((enemy2->getPositionX()-20) < (bullet->getPositionX())) &&  ( (bullet->getPositionX())< (enemy2->getPositionX()+85)  )  &&((enemy2->getPositionY()) < (bullet->getPositionY())) &&  ( (bullet->getPositionY())< (enemy2->getPositionY()+128)  )   )
+            {
+                popgo(4);
+            }
+        }
+    }
+    if(whobeatwho==5)
+    {
+        if( (!bullet4inhero)&&(bullet4inair) )
+        {
+            if(((hero->getPositionX()-20) < (bullet4->getPositionX())) &&  ( (bullet4->getPositionX())< (hero->getPositionX()+60)  )  &&((hero->getPositionY()) < (bullet4->getPositionY())) &&  ( (bullet4->getPositionY())< (hero->getPositionY()+80)  ) )
+            {
+                popgo(5);
+            }
+        }
+    }
+    if(whobeatwho==6)
+    {
+        if( (!bulletinenemy)&&enemy3live&&isbullet)
+        {
+            if(((enemy3->getPositionX()-20) < (bullet->getPositionX())) &&  ( (bullet->getPositionX())< (enemy3->getPositionX()+85)  )  &&((enemy3->getPositionY()) < (bullet->getPositionY())) &&  ( (bullet->getPositionY())< (enemy3->getPositionY()+128)  )   )
+            {
+                popgo(6);
+            }
+        }
+    }
 }
 
 void Hero::popgo(int whogodie)
@@ -890,7 +1083,7 @@ void Hero::popgo(int whogodie)
             bullet2inhero=0;
         };
         auto callFunc= CallFunc::create(callbackfunc);
-        auto actions = Sequence::create(DelayTime::create(0.3),callFunc,NULL);
+        auto actions = Sequence::create(DelayTime::create(0.15),callFunc,NULL);
         bullet2->runAction(actions);
         if(hero_blood<=0)
         {
@@ -906,18 +1099,109 @@ void Hero::popgo(int whogodie)
         score += 10;
         auto callbackfunc = [=]()
         {
-            
             isbullet=0;
-            bullet->setVisible(false); bullet->setPosition(50,50);
+            bullet->setVisible(false);
+            bullet->setPosition(50,50);
             bulletinenemy=0;
         };
         auto callFunc=CallFunc::create(callbackfunc);
-        auto actions = Sequence::create(DelayTime::create(0.3),callFunc,NULL);
+        auto actions = Sequence::create(DelayTime::create(0.15),callFunc,NULL);
         bullet->runAction(actions);
         if(enemyblood<=0)
         {
             score += 50;
             gotodie(2);
+        }
+       
+    }
+    if(whogodie==3)
+    {
+        hero_blood-=enemy2_gongjili;
+        bullet3inhero=1;
+        bullet3->stopAllActions();
+        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()-enemy2_gongjili);
+        auto callbackfunc = [=]()
+        {
+            
+            bullet3inair=0;
+            bullet3->setVisible(false);
+            bullet3->setPosition(50,50);
+            bullet3inhero=0;
+        };
+        auto callFunc= CallFunc::create(callbackfunc);
+        auto actions = Sequence::create(DelayTime::create(0.15),callFunc,NULL);
+        bullet3->runAction(actions);
+        if(hero_blood<=0)
+        {
+            gotodie(1);
+        }
+    }
+    if(whogodie==4)
+    {
+        enemy2blood-=10;
+        bulletinenemy=1;
+        bullet->stopAllActions();
+        enemy2_pProgressView->setCurrentProgress(enemy2_pProgressView->getCurrentProgress()-10);//更改血量
+        score += 10;
+        auto callbackfunc = [=]()
+        {
+            
+            isbullet=0;
+            bullet->setVisible(false);
+            bullet->setPosition(50,50);
+            bulletinenemy=0;
+        };
+        auto callFunc=CallFunc::create(callbackfunc);
+        auto actions = Sequence::create(DelayTime::create(0.15),callFunc,NULL);
+        bullet->runAction(actions);
+        if(enemy2blood<=0)
+        {
+            score += 50;
+            gotodie(3);
+        }
+    }
+    if(whogodie==5)
+    {
+        hero_blood-=enemy3_gongjili;
+        bullet4inhero=1;
+        bullet4->stopAllActions();
+        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()-enemy3_gongjili);
+        auto callbackfunc = [=]()
+        {
+            bullet4inair=0;
+            bullet4->setVisible(false);
+            bullet4->setPosition(50,50);
+            bullet4inhero=0;
+        };
+        auto callFunc= CallFunc::create(callbackfunc);
+        auto actions = Sequence::create(DelayTime::create(0.15),callFunc,NULL);
+        bullet4->runAction(actions);
+        if(hero_blood<=0)
+        {
+            gotodie(1);
+        }
+    }
+    if(whogodie==6)
+    {
+        enemy3blood-=10;
+        bulletinenemy=1;
+        bullet->stopAllActions();
+        enemy3_pProgressView->setCurrentProgress(enemy3_pProgressView->getCurrentProgress()-10);//更改血量
+        score += 10;
+        auto callbackfunc = [=]()
+        {
+            isbullet=0;
+            bullet->setVisible(false);
+            bullet->setPosition(50,50);
+            bulletinenemy=0;
+        };
+        auto callFunc=CallFunc::create(callbackfunc);
+        auto actions = Sequence::create(DelayTime::create(0.15),callFunc,NULL);
+        bullet->runAction(actions);
+        if(enemy3blood<=0)
+        {
+            score += 50;
+            gotodie(4);
         }
     }
 }
@@ -944,7 +1228,6 @@ void Hero::gotodie(int who)
         auto callFunc2=CallFunc::create(callbackfunc2);
         auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,callfunc3,NULL);
         deadttf->runAction(actions);
-        
   
     }
     if(who==2)
@@ -961,6 +1244,7 @@ void Hero::gotodie(int who)
         auto callbackfunc3 = [=]()
         {
             bullet2->setVisible(false);
+            bullet2->setPosition(50,50);
             enemy->setPosition(250,250);
             enemy->removeFromParent();
         };
@@ -971,6 +1255,58 @@ void Hero::gotodie(int who)
         auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,callFunc3,NULL);
         enemy->runAction(actions);
         enemytime = time + 300;
+    }
+    if(who==3)
+    {
+        enemy2live = 0;
+        auto callbackfunc1 = [=]()
+        {
+            enemy2->setVisible(false);
+        };
+        auto callbackfunc2 = [=]()
+        {
+            enemy2->setVisible(true);
+        };
+        auto callbackfunc3 = [=]()
+        {
+            bullet3->setVisible(false);
+            bullet3->setPosition(50,50);
+            enemy2->setPosition(250,250);
+            enemy2->removeFromParent();
+        };
+        enemy2->stopAllActions();
+        auto callFunc1=CallFunc::create(callbackfunc1);
+        auto callFunc2=CallFunc::create(callbackfunc2);
+        auto callFunc3=CallFunc::create(callbackfunc3);
+        auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,callFunc3,NULL);
+        enemy2->runAction(actions);
+        enemy2time = time + 300;
+    }
+    if(who==4)
+    {
+        enemy3live = 0;
+        auto callbackfunc1 = [=]()
+        {
+            enemy3->setVisible(false);
+        };
+        auto callbackfunc2 = [=]()
+        {
+            enemy3->setVisible(true);
+        };
+        auto callbackfunc3 = [=]()
+        {
+            bullet4->setVisible(false);
+            bullet4->setPosition(50,50);
+            enemy3->setPosition(250,250);
+            enemy3->removeFromParent();
+        };
+        enemy3->stopAllActions();
+        auto callFunc1=CallFunc::create(callbackfunc1);
+        auto callFunc2=CallFunc::create(callbackfunc2);
+        auto callFunc3=CallFunc::create(callbackfunc3);
+        auto actions = Sequence::create(callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,DelayTime::create(0.2),callFunc2,DelayTime::create(0.2),callFunc1,callFunc3,NULL);
+        enemy3->runAction(actions);
+        enemy3time = time + 300;
     }
 }
 
@@ -1043,18 +1379,19 @@ void Hero::enemyattack()
     float delta = sqrt(deltx*deltx + delty*delty);
     float ex = deltx/delta;
     float ey = delty/delta;
-    int n = 300;//shecheng
+    int n = enemy_shecheng;//shecheng
     bullet2->setPosition(enemy_x, enemy_y);
     bullet2->setVisible(true);
     bullet2inair=1;
     auto fire = MoveBy::create(0.3,Vec2(-n*ex,-n*ey));
     auto callbackfunc = [=]()
     {
-        bullet->setVisible(false); bullet2->setPosition(50,50);
+        bullet2->setVisible(false);
+        bullet2->setPosition(50,50);
         bullet2inair=0;
     };
     auto callFunc=CallFunc::create(callbackfunc);
-    auto actions = Sequence::create(fire,DelayTime::create(0.3),callFunc,NULL);
+    auto actions = Sequence::create(fire,DelayTime::create(0.15),callFunc,NULL);
     bullet2->runAction(actions);
 }
 
@@ -1079,7 +1416,7 @@ void Hero::itemtimecoming()
                     addChild(item1,5);
                     item1->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item1 = Sprite::create("item/healthpotion.png");
@@ -1110,7 +1447,7 @@ void Hero::itemtimecoming()
                     addChild(item2,5);
                     item2->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item2 = Sprite::create("item/healthpotion.png");
@@ -1141,7 +1478,7 @@ void Hero::itemtimecoming()
                     addChild(item3,5);
                     item3->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item3 = Sprite::create("item/healthpotion.png");
@@ -1172,7 +1509,7 @@ void Hero::itemtimecoming()
                     addChild(item4,5);
                     item4->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item4 = Sprite::create("item/healthpotion.png");
@@ -1203,7 +1540,7 @@ void Hero::itemtimecoming()
                     addChild(item5,5);
                     item5->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item5 = Sprite::create("item/healthpotion.png");
@@ -1234,7 +1571,7 @@ void Hero::itemtimecoming()
                     addChild(item6,5);
                     item6->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item6 = Sprite::create("item/healthpotion.png");
@@ -1265,7 +1602,7 @@ void Hero::itemtimecoming()
                     addChild(item7,5);
                     item7->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item7 = Sprite::create("item/healthpotion.png");
@@ -1296,7 +1633,7 @@ void Hero::itemtimecoming()
                     addChild(item8,5);
                     item8->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item8 = Sprite::create("item/healthpotion.png");
@@ -1327,7 +1664,7 @@ void Hero::itemtimecoming()
                     addChild(item9,5);
                     item9->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item9 = Sprite::create("item/healthpotion.png");
@@ -1358,7 +1695,7 @@ void Hero::itemtimecoming()
                     addChild(item10,5);
                     item10->setScale(0.5,0.5);
                 }
-                else if(ran<7)
+                else if(ran<8)
                 {
                     isitemlive[i]=2;
                     item10 = Sprite::create("item/healthpotion.png");
@@ -1433,7 +1770,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1461,7 +1801,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1489,7 +1832,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1517,7 +1863,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1545,7 +1894,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1573,7 +1925,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1601,7 +1956,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1629,7 +1987,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1657,7 +2018,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1685,7 +2049,10 @@ void Hero::itempop()
                     }
                     if(isitemlive[i]==3)
                     {
-                        hero_shecheng+=30;
+                        if(hero_shecheng<400)
+                        {
+                            hero_shecheng+=15;
+                        };
                     }
                     isitemlive[i]=0;
                 }
@@ -1703,7 +2070,6 @@ void Hero::enemyforup()
         enemycoming();
         enemymovetime=enemytime;
         enemyacktime=enemytime;
-        enemytime+=1200;
     }
     if(enemylive)
     {
@@ -1712,7 +2078,7 @@ void Hero::enemyforup()
         if(time==enemymovetime)
         {
             enemymove();
-            enemymovetime+=60;
+            enemymovetime+=18;
         }
         if(time==enemyacktime)
         {
@@ -1743,7 +2109,588 @@ void Hero::couldbullet2go()
             bullet2inwall=0;
         };
         auto callFunc=CallFunc::create(callbackfunc);
-        auto actions=Sequence::create(DelayTime::create(0.3),callFunc,NULL);
+        auto actions=Sequence::create(DelayTime::create(0.15),callFunc,NULL);
         bullet2->runAction(actions);
     }
 }
+
+
+
+Point Hero::getenemypos()
+{
+    float x=0,y=0;
+    for(;;)
+    {
+        x = random(500 , 3200);
+        y = random(500 , 2000);
+        Point pos = positiontrans(Point(x+30,y+30));
+        if(  !(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x+3,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y+3)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x-3,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y-3)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x+2,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y+2)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x-2,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y-2)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x+1,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y+1)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x-1,pos.y)))
+           &&!(map->getLayer("move")-> getTileGIDAt(Point(pos.x,pos.y-1)))
+           )
+        {
+            break;
+        }
+    }
+    return Point(x,y);
+}
+
+
+
+void Hero::enemy2coming()
+{
+    enemy2= Sprite::createWithSpriteFrameName("11001.png");
+    addChild(enemy2,2);
+    enemy2->setPosition(getenemypos());
+    auto enemy2_animation1 = Animation::createWithSpriteFrames(enemy2_animFrames1, 0.3);
+    enemy2->runAction(RepeatForever::create(Animate::create(enemy2_animation1))); //测试动画
+    enemy2live=1;
+    enemy2blood=100;
+    if(enemy2_speed<=30)
+    {
+        enemy2_speed+=2;
+    }
+    if(enemy2_shesu>=50)
+    {
+        enemy2_shesu-=10;
+    }
+    if(enemy2_gongjili<=50)
+    {
+        enemy2_gongjili+=5;
+    }
+    if(enemy2_shecheng<=600)
+    {
+        enemy2_shecheng+=30;
+    }
+    enemy2_x=enemy2->getPositionX();
+    enemy2_y=enemy2->getPositionY();
+    enemy2_pProgressView = new ProgressView();
+    enemy2_pProgressView->setScale(1,0.5);
+    enemy2_pProgressView->setPosition(330,450);
+    enemy2_pProgressView->setBackgroundTexture("item/noblood.png");
+    enemy2_pProgressView->setForegroundTexture("item/fullblood.png");
+    enemy2_pProgressView->setTotalProgress(100.0f);
+    enemy2_pProgressView->setCurrentProgress(100.0f);
+    enemy2->addChild(enemy2_pProgressView,5);
+}
+
+
+void Hero::enemy2forup()
+{
+    if(time==enemy2time&&!enemy2live)
+    {
+        enemy2coming();
+        enemy2movetime=enemy2time;
+        enemy2acktime=enemy2time;
+    }
+    if(enemy2live)
+    {
+        enemy2_x = enemy2->getPositionX();
+        enemy2_y = enemy2->getPositionY();
+        if(time==enemy2movetime)
+        {
+            enemy2move();
+            enemy2movetime+=18;
+        }
+        if(time==enemy2acktime+15)
+        {
+            enemy2attack();
+            enemy2acktime+=enemy2_shesu;
+        }
+    }
+    if( (bullet3inair) &&(!bullet3inwall) )
+    {
+        couldbullet3go();
+    }
+}
+
+void Hero::enemy2move()
+{
+    getenemy2direction(1);
+    int i = enemy2direction;
+    for(;;)
+    {
+        if(canenemy2go(i))
+        {
+            break;
+        }
+        i = random(1, 4);
+    }
+    switch (i)
+    {
+        case 1:
+        {
+            enemy2->stopAllActions();
+            auto enemy2_animation1 = Animation::createWithSpriteFrames(enemy2_animFrames1, 0.3);
+            enemy2->runAction(RepeatForever::create(Animate::create(enemy2_animation1))); //测试动画
+            auto moveby=MoveBy::create(0.3,Point(0,-enemy2_speed));
+            enemy2->runAction(moveby);
+            break;
+        }
+        case 2:
+        {
+            enemy2->stopAllActions();
+            auto enemy2_animation2 = Animation::createWithSpriteFrames(enemy2_animFrames2, 0.3);
+            enemy2->runAction(RepeatForever::create(Animate::create(enemy2_animation2))); //测试动画
+            auto moveby=MoveBy::create(0.3,Point(0,enemy2_speed));
+            enemy2->runAction(moveby);
+            break;
+        }
+        case 3:
+        {
+            enemy2->stopAllActions();
+            auto enemy2_animation3 = Animation::createWithSpriteFrames(enemy2_animFrames3, 0.3);
+            enemy2->runAction(RepeatForever::create(Animate::create(enemy2_animation3))); //测试动画
+            auto moveby=MoveBy::create(0.3,Point(-enemy2_speed,0));
+            enemy2->runAction(moveby);
+            break;
+        }
+        case 4:
+        {
+            enemy2->stopAllActions();
+            auto enemy2_animation4 = Animation::createWithSpriteFrames(enemy2_animFrames4, 0.3);
+            enemy2->runAction(RepeatForever::create(Animate::create(enemy2_animation4))); //测试动画
+            auto moveby=MoveBy::create(0.3,Point(enemy2_speed,0));
+            enemy2->runAction(moveby);
+            break;
+        }
+    }
+}
+
+
+
+void Hero::enemy2attack()
+{
+    bullet3->setVisible(true);
+    float deltx,delty;
+    deltx = enemy2_x - hero_x;
+    delty = enemy2_y - hero_y;
+    float delta = sqrt(deltx*deltx + delty*delty);
+    float ex = deltx/delta;
+    float ey = delty/delta;
+    int n = enemy2_shecheng;//shecheng
+    bullet3->setPosition(enemy2_x, enemy2_y);
+    bullet3->setVisible(true);
+    bullet3inair=1;
+    auto fire = MoveBy::create(0.3,Vec2(-n*ex,-n*ey));
+    auto callbackfunc = [=]()
+    {
+        bullet3->setVisible(false);
+        bullet3->setPosition(50,50);
+        bullet3inair=0;
+    };
+    auto callFunc=CallFunc::create(callbackfunc);
+    auto actions = Sequence::create(fire,DelayTime::create(0.15),callFunc,NULL);
+    bullet3->runAction(actions);
+}
+
+
+void Hero::couldbullet3go()
+{
+    Point pos=positiontrans(bullet3->getPosition());
+    int tiledID = map->getLayer("move")->getTileGIDAt(pos);
+    if(tiledID)
+    {
+        bullet3inwall=1;
+        bullet3->stopAllActions();
+        auto callbackfunc = [=]()
+        {
+            bullet3inair=0;
+            bullet3->setVisible(false);
+            bullet3->setPosition(50,50);
+            bullet3inwall=0;
+        };
+        auto callFunc=CallFunc::create(callbackfunc);
+        auto actions=Sequence::create(DelayTime::create(0.15),callFunc,NULL);
+        bullet3->runAction(actions);
+    }
+}
+
+
+bool Hero::canenemy2go(int direction)
+{
+    Point temp=Point(0,0);
+    Point enemy2temp=Point(0,0);
+    if(direction==1)
+    {
+        temp=Point(1,1);
+    }
+    if(direction==2)
+    {
+        temp=Point(1,-3);
+    }
+    if(direction==3)
+    {
+        temp=Point(0,-2);
+    }
+    if(direction==4)
+    {
+        temp=Point(3,0);
+    }
+    auto maplayer = map->getLayer("move");
+    Point pos=positiontrans(enemy2->getPosition());
+    int tiledID =  maplayer -> getTileGIDAt(pos+temp);
+//    if(    ( (enemy2->getPositionX ()) < (enemy3->getPositionX ()   )  )
+//       &&  ( (enemy3->getPositionX() ) < (enemy2->getPositionX ()+60)  )
+//       &&  ( (enemy2->getPositionY() ) < (enemy3->getPositionY ()   )  )
+//       &&  ( (enemy3->getPositionY() ) < (enemy2->getPositionY ()+80)  ) )
+//    {
+//        tiledID = 1 ;
+//    }
+    if(tiledID==0)
+    {
+        return true;
+    }
+    else if(tiledID!=0)
+    {
+        return false;
+    }
+}
+
+
+void Hero::getenemy2direction(int enemy2code)
+{
+    if(enemy2code==1)
+    {
+        if((enemy2_x-hero_x)>=0)
+        {
+            if((enemy2_y-hero_y)>=0)
+            {
+                if((enemy2_y-hero_y)>=(enemy2_x-hero_x))
+                {
+                    enemy2direction=1;
+                }
+                else
+                {
+                    enemy2direction=3;
+                }
+            }
+            if((enemy2_y-hero_y)<0)
+            {
+                if((hero_y-enemy2_y)>=(enemy2_x-hero_x))
+                {
+                    enemy2direction=2;
+                }
+                else
+                {
+                    enemy2direction=3;
+                }
+            }
+        }
+        if((enemy2_x-hero_x)<0)
+        {
+            if((enemy2_y-hero_y)>0)
+            {
+                if((hero_x-enemy2_x)>=(enemy2_y-hero_y))
+                {
+                    enemy2direction=4;
+                }
+                else
+                {
+                    enemy2direction=1;
+                }
+            }
+            if((enemy2_y-hero_y)<0)
+            {
+                if((hero_x-enemy2_x)>=(hero_y-enemy2_y))
+                {
+                    enemy2direction=4;
+                }
+                else
+                {
+                    enemy2direction=2;
+                }
+            }
+        }
+    }
+}
+
+
+//enemy3
+
+
+
+
+
+void Hero::enemy3coming()
+{
+    enemy3= Sprite::createWithSpriteFrameName("11001.png");
+    addChild(enemy3,2);
+    enemy3->setPosition(getenemypos());
+    auto enemy3_animation1 = Animation::createWithSpriteFrames(enemy3_animFrames1, 0.3);
+    enemy3->runAction(RepeatForever::create(Animate::create(enemy3_animation1))); //测试动画
+    enemy3live=1;
+    enemy3blood=100;
+    if(enemy3_speed<=30)
+    {
+        enemy3_speed+=2;
+    }
+    if(enemy3_shesu>=50)
+    {
+        enemy3_shesu-=10;
+    }
+    if(enemy3_gongjili<=50)
+    {
+        enemy3_gongjili+=5;
+    }
+    if(enemy3_shecheng<=600)
+    {
+        enemy3_shecheng+=30;
+    }
+    enemy3_x=enemy3->getPositionX();
+    enemy3_y=enemy3->getPositionY();
+    enemy3_pProgressView = new ProgressView();
+    enemy3_pProgressView->setScale(1,0.5);
+    enemy3_pProgressView->setPosition(330,450);
+    enemy3_pProgressView->setBackgroundTexture("item/noblood.png");
+    enemy3_pProgressView->setForegroundTexture("item/fullblood.png");
+    enemy3_pProgressView->setTotalProgress(100.0f);
+    enemy3_pProgressView->setCurrentProgress(100.0f);
+    enemy3->addChild(enemy3_pProgressView,5);
+}
+
+
+void Hero::enemy3forup()
+{
+    if(time==enemy3time&&!enemy3live)
+    {
+        enemy3coming();
+        enemy3movetime=enemy3time;
+        enemy3acktime=enemy3time;
+    }
+    if(enemy3live)
+    {
+        enemy3_x = enemy3->getPositionX();
+        enemy3_y = enemy3->getPositionY();
+        if(time==enemy3movetime)
+        {
+            enemy3move();
+            enemy3movetime+=18;
+        }
+        if(time==enemy3acktime+30)
+        {
+            enemy3attack();
+            enemy3acktime+=enemy3_shesu;
+        }
+    }
+    if( (bullet4inair) &&(!bullet4inwall) )
+    {
+        couldbullet4go();
+    }
+}
+
+void Hero::enemy3move()
+{
+    getenemy3direction(1);
+    int i = enemy3direction;
+    for(;;)
+    {
+        if(canenemy3go(i))
+        {
+            break;
+        }
+        i = random(1, 4);
+    }
+    switch (i)
+    {
+        case 1:
+        {
+            enemy3->stopAllActions();
+            auto enemy3_animation1 = Animation::createWithSpriteFrames(enemy3_animFrames1, 0.3);
+            enemy3->runAction(RepeatForever::create(Animate::create(enemy3_animation1))); //测试动画
+            auto moveby=MoveBy::create(0.3,Point(0,-enemy3_speed));
+            enemy3->runAction(moveby);
+            break;
+        }
+        case 2:
+        {
+            enemy3->stopAllActions();
+            auto enemy3_animation2 = Animation::createWithSpriteFrames(enemy3_animFrames2, 0.3);
+            enemy3->runAction(RepeatForever::create(Animate::create(enemy3_animation2))); //测试动画
+            auto moveby=MoveBy::create(0.3,Point(0,enemy3_speed));
+            enemy3->runAction(moveby);
+            break;
+        }
+        case 3:
+        {
+            enemy3->stopAllActions();
+            auto enemy3_animation3 = Animation::createWithSpriteFrames(enemy3_animFrames3, 0.3);
+            enemy3->runAction(RepeatForever::create(Animate::create(enemy3_animation3))); //测试动画
+            auto moveby=MoveBy::create(0.3,Point(-enemy3_speed,0));
+            enemy3->runAction(moveby);
+            break;
+        }
+        case 4:
+        {
+            enemy3->stopAllActions();
+            auto enemy3_animation4 = Animation::createWithSpriteFrames(enemy3_animFrames4, 0.3);
+            enemy3->runAction(RepeatForever::create(Animate::create(enemy3_animation4))); //测试动画
+            auto moveby=MoveBy::create(0.3,Point(enemy3_speed,0));
+            enemy3->runAction(moveby);
+            break;
+        }
+    }
+}
+
+
+
+void Hero::enemy3attack()
+{
+    bullet4->setVisible(true);
+    float deltx,delty;
+    deltx = enemy3_x - hero_x;
+    delty = enemy3_y - hero_y;
+    float delta = sqrt(deltx*deltx + delty*delty);
+    float ex = deltx/delta;
+    float ey = delty/delta;
+    int n = enemy3_shecheng;//shecheng
+    bullet4->setPosition(enemy3_x, enemy3_y);
+    bullet4->setVisible(true);
+    bullet4inair=1;
+    auto fire = MoveBy::create(0.3,Vec2(-n*ex,-n*ey));
+    auto callbackfunc = [=]()
+    {
+        bullet4->setVisible(false);
+        bullet4->setPosition(50,50);
+        bullet4inair=0;
+    };
+    auto callFunc=CallFunc::create(callbackfunc);
+    auto actions = Sequence::create(fire,DelayTime::create(0.15),callFunc,NULL);
+    bullet4->runAction(actions);
+}
+
+
+void Hero::couldbullet4go()
+{
+    Point pos=positiontrans(bullet4->getPosition());
+    int tiledID = map->getLayer("move")->getTileGIDAt(pos);
+    if(tiledID)
+    {
+        bullet4inwall=1;
+        bullet4->stopAllActions();
+        auto callbackfunc = [=]()
+        {
+            bullet4inair=0;
+            bullet4->setVisible(false);
+            bullet4->setPosition(50,50);
+            bullet4inwall=0;
+        };
+        auto callFunc=CallFunc::create(callbackfunc);
+        auto actions=Sequence::create(DelayTime::create(0.15),callFunc,NULL);
+        bullet4->runAction(actions);
+    }
+}
+
+
+bool Hero::canenemy3go(int direction)
+{
+    Point temp=Point(0,0);
+    Point enemy3temp=Point(0,0);
+    if(direction==1)
+    {
+        temp=Point(1,1);
+    }
+    if(direction==2)
+    {
+        temp=Point(1,-3);
+    }
+    if(direction==3)
+    {
+        temp=Point(0,-2);
+    }
+    if(direction==4)
+    {
+        temp=Point(3,0);
+    }
+    auto maplayer = map->getLayer("move");
+    Point pos=positiontrans(enemy3->getPosition());
+    int tiledID =  maplayer -> getTileGIDAt(pos+temp);
+//    if(    ( (enemy3->getPositionX ()) < (enemy->getPositionX ()   )  )
+//       &&  ( (enemy->getPositionX() ) < (enemy3->getPositionX ()+60)  )
+//       &&  ( (enemy3->getPositionY() ) < (enemy->getPositionY ()   )  )
+//       &&  ( (enemy->getPositionY() ) < (enemy3->getPositionY ()+80)  ) )
+//    {
+//        tiledID = 1 ;
+//    }
+    if(tiledID==0)
+    {
+        return true;
+    }
+    else if(tiledID!=0)
+    {
+        return false;
+    }
+}
+
+
+void Hero::getenemy3direction(int enemy3code)
+{
+    if(enemy3code==1)
+    {
+        if((enemy3_x-hero_x)>=0)
+        {
+            if((enemy3_y-hero_y)>=0)
+            {
+                if((enemy3_y-hero_y)>=(enemy3_x-hero_x))
+                {
+                    enemy3direction=1;
+                }
+                else
+                {
+                    enemy3direction=3;
+                }
+            }
+            if((enemy3_y-hero_y)<0)
+            {
+                if((hero_y-enemy3_y)>=(enemy3_x-hero_x))
+                {
+                    enemy3direction=2;
+                }
+                else
+                {
+                    enemy3direction=3;
+                }
+            }
+        }
+        if((enemy3_x-hero_x)<0)
+        {
+            if((enemy3_y-hero_y)>0)
+            {
+                if((hero_x-enemy3_x)>=(enemy3_y-hero_y))
+                {
+                    enemy3direction=4;
+                }
+                else
+                {
+                    enemy3direction=1;
+                }
+            }
+            if((enemy3_y-hero_y)<0)
+            {
+                if((hero_x-enemy3_x)>=(hero_y-enemy3_y))
+                {
+                    enemy3direction=4;
+                }
+                else
+                {
+                    enemy3direction=2;
+                }
+            }
+        }
+    }
+}
+
+
+
+//end
+

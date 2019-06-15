@@ -32,6 +32,14 @@ public:
     cocos2d::Vector <cocos2d::SpriteFrame*> s_animFrames2;
     cocos2d::Vector <cocos2d::SpriteFrame*> s_animFrames3;
     cocos2d::Vector <cocos2d::SpriteFrame*> s_animFrames4;
+    cocos2d::Vector <cocos2d::SpriteFrame*> enemy2_animFrames1;
+    cocos2d::Vector <cocos2d::SpriteFrame*> enemy2_animFrames2;
+    cocos2d::Vector <cocos2d::SpriteFrame*> enemy2_animFrames3;
+    cocos2d::Vector <cocos2d::SpriteFrame*> enemy2_animFrames4;
+    cocos2d::Vector <cocos2d::SpriteFrame*> enemy3_animFrames1;
+    cocos2d::Vector <cocos2d::SpriteFrame*> enemy3_animFrames2;
+    cocos2d::Vector <cocos2d::SpriteFrame*> enemy3_animFrames3;
+    cocos2d::Vector <cocos2d::SpriteFrame*> enemy3_animFrames4;
     void update(float delta) override;
     static cocos2d::Scene* createScene();
     virtual bool init();
@@ -47,13 +55,15 @@ public:
     //------------------------------------------------------------------//
     ProgressView *m_pProgressView;
     ProgressView *enemy_pProgressView;//血条
+    ProgressView *enemy2_pProgressView;//血条
+    ProgressView *enemy3_pProgressView;//血条
     
     //------------------------------------------------------------------//
     bool touch(Touch * touch,Event *event);//鼠标点击
     float point_x,point_y;//点击位置
     float hero_x,hero_y;//英雄实时位置
     //--------------r子弹--------//
-    int bullet2inhero=0;
+    
     void display();
     cocos2d::Point viewpos;
     cocos2d::Point positiontrans(cocos2d::Point pos);
@@ -62,16 +72,30 @@ public:
     void bulletgo();
     cocos2d::Sprite* bullet;
     cocos2d::Sprite* bullet2;
+    cocos2d::Sprite* bullet3;
+    cocos2d::Sprite* bullet4;
     int bullet2inair=0;
+    int bullet3inair=0;
+    int bullet4inair=0;
     void couldbulletgo();
     void couldbullet2go();
+    void couldbullet3go();
+    void couldbullet4go();
     int bulletinwall=0;
     int bullet2inwall=0;
+    int bullet3inwall=0;
+    int bullet4inwall=0;
     int bulletinenemy=0;
+    int bulletinenemy2=0;
+    int bulletinenemy3=0;
+    int bullet2inhero=0;
+    int bullet3inhero=0;
+    int bullet4inhero=0;
     int time=0;
     
     
     //enemy
+    int enemy_shecheng=300;
     int enemyacktime=300;
     int enemyblood=100;
     float enemy_x;
@@ -88,10 +112,10 @@ public:
     void getenemydirection(int enemycode);
     void getlenth(int direction);
     void enemyattack();
-    int enemy_speed = 50 ;
+    int enemy_speed = 20 ;
     int enemy_shesu = 110;
     int enemy_gongjili=0;
-    
+    cocos2d::Point getenemypos();
     void enemyforup();
     
     //结束
@@ -119,8 +143,9 @@ public:
     void itempop();
     //结束
     //英雄属性
-    float hero_speed=5;
-    int hero_shecheng=200;
+    int weaponnum=0;
+    float hero_speed=0;
+    int hero_shecheng=0;
     int hero_blood=0;
     //结束
     
@@ -134,6 +159,63 @@ protected:
     cocos2d::Label * ranklist;
     cocos2d::Label * scorettf;
     int score;
+    //结束
+    
+    
+    
+    
+    //enemy2
+    int enemy2_shecheng=300;
+    int enemy2acktime=300;
+    int enemy2blood=100;
+    float enemy2_x;
+    float enemy2_y;
+    cocos2d::Sprite* enemy2;
+    void enemy2coming();
+    int enemy2time=2;
+    int enemy2live=0;
+    void enemy2move();
+    int enemy2movetime=0;
+    bool canenemy2go(int direction);
+    float lenthfromhero2[4]={0,0,0,0};
+    int enemy2direction=0;
+    void getenemy2direction(int enemy2code);
+    void getlenth2(int direction);
+    void enemy2attack();
+    int enemy2_speed = 20 ;
+    int enemy2_shesu = 110;
+    int enemy2_gongjili=0;
+    void enemy2forup();
+    
+    //结束
+    
+    //enemy3
+    int enemy3_shecheng=300;
+    int enemy3acktime=300;
+    int enemy3blood=100;
+    float enemy3_x;
+    float enemy3_y;
+    cocos2d::Sprite* enemy3;
+    void enemy3coming();
+    int enemy3time=2;
+    int enemy3live=0;
+    void enemy3move();
+    int enemy3movetime=0;
+    bool canenemy3go(int direction);
+    float lenthfromhero3[4]={0,0,0,0};
+    int enemy3direction=0;
+    void getenemy3direction(int enemy3code);
+    void getlenth3(int direction);
+    void enemy3attack();
+    int enemy3_speed = 20 ;
+    int enemy3_shesu = 110;
+    int enemy3_gongjili=0;
+    void enemy3forup();
+    
+    
+    //end
+    
+    
 };
 
 #endif /* hero_hpp */

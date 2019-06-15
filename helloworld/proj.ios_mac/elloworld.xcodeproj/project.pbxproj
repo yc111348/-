@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		046A376022B539EF00DBD58F /* monster3 in Resources */ = {isa = PBXBuildFile; fileRef = 046A375E22B539EF00DBD58F /* monster3 */; };
+		046A376122B539EF00DBD58F /* monster3 in Resources */ = {isa = PBXBuildFile; fileRef = 046A375E22B539EF00DBD58F /* monster3 */; };
+		0471C35D22B4C14E0031C26C /* EndGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0471C35C22B4C14E0031C26C /* EndGameScene.cpp */; };
+		0471C35E22B4C14E0031C26C /* EndGameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0471C35C22B4C14E0031C26C /* EndGameScene.cpp */; };
+		0471C36222B4C8420031C26C /* hero2 in Resources */ = {isa = PBXBuildFile; fileRef = 0471C36122B4C8420031C26C /* hero2 */; };
+		0471C36322B4C8420031C26C /* hero2 in Resources */ = {isa = PBXBuildFile; fileRef = 0471C36122B4C8420031C26C /* hero2 */; };
+		0471C36822B4E23B0031C26C /* monster2 in Resources */ = {isa = PBXBuildFile; fileRef = 0471C36622B4E23B0031C26C /* monster2 */; };
+		0471C36922B4E23B0031C26C /* monster2 in Resources */ = {isa = PBXBuildFile; fileRef = 0471C36622B4E23B0031C26C /* monster2 */; };
 		04FB1ECB22B3F74600DF627F /* Heroscene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB1EB822B3F74400DF627F /* Heroscene.cpp */; };
 		04FB1ECC22B3F74600DF627F /* Heroscene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB1EB822B3F74400DF627F /* Heroscene.cpp */; };
 		04FB1ECD22B3F74600DF627F /* popOUT2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04FB1EB922B3F74400DF627F /* popOUT2.cpp */; };
@@ -122,6 +130,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		046A375E22B539EF00DBD58F /* monster3 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = monster3; sourceTree = "<group>"; };
+		0471C35A22B4C14E0031C26C /* EndGameScene.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = EndGameScene.hpp; sourceTree = "<group>"; };
+		0471C35C22B4C14E0031C26C /* EndGameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EndGameScene.cpp; sourceTree = "<group>"; };
+		0471C36122B4C8420031C26C /* hero2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = hero2; sourceTree = "<group>"; };
+		0471C36622B4E23B0031C26C /* monster2 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = monster2; sourceTree = "<group>"; };
 		04FB1EB622B3F74400DF627F /* ProgressView.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ProgressView.hpp; sourceTree = "<group>"; };
 		04FB1EB822B3F74400DF627F /* Heroscene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Heroscene.cpp; sourceTree = "<group>"; };
 		04FB1EB922B3F74400DF627F /* popOUT2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = popOUT2.cpp; sourceTree = "<group>"; };
@@ -317,6 +330,9 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				046A375E22B539EF00DBD58F /* monster3 */,
+				0471C36622B4E23B0031C26C /* monster2 */,
+				0471C36122B4C8420031C26C /* hero2 */,
 				04FB1EE122B3F76C00DF627F /* A monster */,
 				04FB1EE022B3F76C00DF627F /* hero1 */,
 				04FB1EE422B3F76D00DF627F /* item */,
@@ -333,6 +349,8 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0471C35C22B4C14E0031C26C /* EndGameScene.cpp */,
+				0471C35A22B4C14E0031C26C /* EndGameScene.hpp */,
 				04FB1EC722B3F74500DF627F /* CharacterScene.cpp */,
 				04FB1EC122B3F74500DF627F /* CharacterScene.hpp */,
 				04FB1EC322B3F74500DF627F /* ChooseScene.cpp */,
@@ -485,14 +503,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				04FB1EE922B3F76D00DF627F /* A monster in Resources */,
+				0471C36822B4E23B0031C26C /* monster2 in Resources */,
 				1A88B2641FC3D9C9005C14AE /* Images.xcassets in Resources */,
 				04FB1EE722B3F76D00DF627F /* hero1 in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
 				04FB1EEB22B3F76D00DF627F /* MUSICres in Resources */,
+				046A376022B539EF00DBD58F /* monster3 in Resources */,
 				1AF87B891F6F781D007BE51C /* LaunchScreenBackground.png in Resources */,
 				04FB1EED22B3F76D00DF627F /* UIres in Resources */,
 				04FB1EEF22B3F76D00DF627F /* item in Resources */,
+				0471C36222B4C8420031C26C /* hero2 in Resources */,
 				1AF87B881F6F781D007BE51C /* LaunchScreen.storyboard in Resources */,
 				04FB1EE522B3F76D00DF627F /* mapres in Resources */,
 			);
@@ -507,10 +528,13 @@
 				3EACC99019EE6D4300EB3C5E /* res in Resources */,
 				521A8EAA19F11F5000D177D7 /* fonts in Resources */,
 				04FB1EE822B3F76D00DF627F /* hero1 in Resources */,
+				0471C36322B4C8420031C26C /* hero2 in Resources */,
 				04FB1EEA22B3F76D00DF627F /* A monster in Resources */,
+				046A376122B539EF00DBD58F /* monster3 in Resources */,
 				04FB1EE622B3F76D00DF627F /* mapres in Resources */,
 				04FB1EEC22B3F76D00DF627F /* MUSICres in Resources */,
 				04FB1EF022B3F76D00DF627F /* item in Resources */,
+				0471C36922B4E23B0031C26C /* monster2 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -521,6 +545,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0471C35D22B4C14E0031C26C /* EndGameScene.cpp in Sources */,
 				04FB1ED722B3F74600DF627F /* WeaponScene.cpp in Sources */,
 				04FB1ECD22B3F74600DF627F /* popOUT2.cpp in Sources */,
 				04FB1ECB22B3F74600DF627F /* Heroscene.cpp in Sources */,
@@ -551,6 +576,7 @@
 				04FB1ECC22B3F74600DF627F /* Heroscene.cpp in Sources */,
 				46880B8B19C43A87006E1F66 /* HelloWorldScene.cpp in Sources */,
 				04FB1EDC22B3F74600DF627F /* CharacterScene.cpp in Sources */,
+				0471C35E22B4C14E0031C26C /* EndGameScene.cpp in Sources */,
 				04FB1EDA22B3F74600DF627F /* ChooseScene.cpp in Sources */,
 				04FB1ED822B3F74600DF627F /* WeaponScene.cpp in Sources */,
 				04FB1ED022B3F74600DF627F /* SingleConnectChoose.cpp in Sources */,
