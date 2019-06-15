@@ -427,16 +427,10 @@ void Hero::update(float delta)
         auto * listenerEndGame = EventListenerTouchOneByOne::create();
         listenerEndGame->onTouchBegan = [this](Touch * touch,Event * event)
         {
-<<<<<<< HEAD
-             Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, LoginScene::createScene()));
-=======
-          
-        Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, EndGameScene::createScene()));
->>>>>>> e1dd5f3ea284e618bd8ce85a6e91877fcd3c25cf
-            
+          Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, EndGameScene::createScene()));
             return false;
         };
-        Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerEndGame,this);
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listenerEndGame,this);
     }
     //----------结     束-------------//
     
@@ -640,8 +634,6 @@ void Hero::enemycoming()
     auto enemy_animation1 = Animation::createWithSpriteFrames(enemy_animFrames1, 0.3);
     enemy->runAction(RepeatForever::create(Animate::create(enemy_animation1))); //测试动画
     enemylive=1;
-<<<<<<< HEAD
-=======
     enemyblood=100;
     if(enemy_speed<=100)
     {
@@ -657,7 +649,6 @@ void Hero::enemycoming()
     }
     enemy_x = enemy->getPositionX();
     enemy_y=enemy->getPositionY();
->>>>>>> 1866716629da54ef516810fb97ca71c0230643f5
     enemy_pProgressView = new ProgressView();
     enemy_pProgressView->setScale(1,0.5);
     enemy_pProgressView->setPosition(330,450);
@@ -836,7 +827,6 @@ void Hero::gotodie(int who)
 {
     if(who==1)
     {
-        this -> unscheduleUpdate();
         auto callbackfunc1 = [=]()
         {
             deadttf -> setVisible(true);
@@ -849,7 +839,6 @@ void Hero::gotodie(int who)
         {
             ifendgame = 1;
         };
-        
         hero->stopAllActions();
         auto callfunc3=CallFunc::create(callbackfunc3);
         auto callFunc1=CallFunc::create(callbackfunc1);
@@ -1613,16 +1602,9 @@ void Hero::enemyforup()
     if(time==enemytime&&!enemylive)
     {
         enemycoming();
-<<<<<<< HEAD
-        enemytime+=60000;
-=======
         enemymovetime=enemytime;
         enemyacktime=enemytime;
-<<<<<<< HEAD
-=======
         enemytime+=1200;
->>>>>>> 1866716629da54ef516810fb97ca71c0230643f5
->>>>>>> e1dd5f3ea284e618bd8ce85a6e91877fcd3c25cf
     }
     if(enemylive)
     {
