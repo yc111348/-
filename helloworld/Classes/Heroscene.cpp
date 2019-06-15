@@ -426,7 +426,6 @@ void Hero::update(float delta)
         auto * listenerEndGame = EventListenerTouchOneByOne::create();
         listenerEndGame->onTouchBegan = [this](Touch * touch,Event * event)
         {
-          
              Director::getInstance()->replaceScene(TransitionProgressInOut::create(0.5, LoginScene::createScene()));
             
             return false;
@@ -780,10 +779,10 @@ void Hero::popgo(int whogodie)
 {
     if(whogodie==1)
     {
-        hero_blood-=10;
+        hero_blood-=enemy_gongjili;
         bullet2inhero=1;
         bullet2->stopAllActions();
-        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()-10);
+        m_pProgressView->setCurrentProgress(m_pProgressView->getCurrentProgress()-enemy_gongjili);
         auto callbackfunc = [=]()
         {
             
