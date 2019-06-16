@@ -7,6 +7,7 @@
 
 #include "EndGameScene.hpp"
 #include "ChooseScene.hpp"
+#include "RankScene.hpp"
 #include "Heroscene.hpp"
 #include "popOUT.hpp"
 
@@ -44,28 +45,41 @@ bool EndGameScene::init()
     
     auto continueButton = ui::Button::create("UIres/yes.png");
     auto returnButton = ui::Button::create("UIres/no.png");
+    auto rankButton = ui::Button::create("UIres/mid.png");
+    rankButton -> setScale(0.6, 0.6);
     auto yesttf = Label::createWithTTF("重新开始", "fonts/chicken.ttf", 35);
     auto nottf = Label::createWithTTF("返回菜单", "fonts/chicken.ttf", 35);
+    auto rankttf = Label::createWithTTF("查看排行", "fonts/chicken.ttf", 35);
     
     yesttf -> setPosition(continueButton->getPositionX()+100, continueButton->getPositionY()+40);
     nottf -> setPosition(returnButton->getPositionX()+100, returnButton->getPositionY()+40);
+    rankttf -> setPosition(size.width/2, size.height/3);
     
-    continueButton -> cocos2d::Node::setPosition(Vec2(size.width/3,size.height/3));
-    returnButton -> cocos2d::Node::setPosition(Vec2(size.width*2/3,size.height/3));
+    continueButton -> cocos2d::Node::setPosition(Vec2(size.width/3-50,size.height/3));
+    returnButton -> cocos2d::Node::setPosition(Vec2(size.width*2/3+50,size.height/3));
+    rankButton -> cocos2d::Node::setPosition(Vec2(size.width/2,size.height/3));
     
     continueButton -> addChild(yesttf);
     returnButton -> addChild(nottf);
+    addChild(rankttf,4);
+    
     this -> addChild(continueButton,3);
     this -> addChild(returnButton,3);
+    this -> addChild(rankButton,3);
+    
     
     continueButton -> addClickEventListener([this](Ref* ref)
                                             {
                                                 Director::getInstance()->replaceScene(Hero::createScene());
                                             });
     returnButton -> addClickEventListener([this](Ref* ref)
-                                            {
-                                                Director::getInstance()->replaceScene(ChooseScene::createScene());
-                                            });
+                                          {
+                                              Director::getInstance()->replaceScene(ChooseScene::createScene());
+                                          });
+    rankButton -> addClickEventListener([this](Ref* ref)
+                                        {
+                                            Director::getInstance()->replaceScene(RankScene::createScene());
+                                        });
     
     
     //退出按钮
